@@ -1,2 +1,2 @@
 # EnDek
-This python file allows you to encrypt English sentences. 
+This python file allows you to encrypt English sentences. This python file allows you to encrypt English sentences. Though in this stage there is a pre fixed encrypt and decrypt later, I  will implement a database to store a randomly generated key which can only be printed once if forgotten a new key can be made. The key will be a list and the code will have functionality to accept decrypt keys and make the key into a hidden dictionary.
