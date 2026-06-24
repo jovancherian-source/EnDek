@@ -1,3 +1,24 @@
+def splash():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+
+    print(r"""
+  ███████╗        
+  ██╔════╝      ██████╗       ██╗  ██╗
+  ██║    _ __   ██╔══██╗      ██║ ██╔╝
+  █████╗| '_ \  ██║  ██║/ _ \ ██╠═██╔╝
+  ██╔══╝| | | | ██║  ██║  __/ ██║╚██╗ 
+  ██║   |_| |_| ██████╔╝\___| ██║ ╚██╗
+  ███████╗      ╚═════╝       ╚═╝  ╚═╝
+                 EnDek
+    """)
+
+    print(reset)
+
+splash()
+
 users = ["jovancherian"]
 password = '3e3e3e'
 
@@ -32,21 +53,31 @@ encrypt1 = {
 
 }
 
+Decrypter = { v : k for k, v in encrypt1.items()}
+
 input_username = input("username: ")
 
 if input_username in users:
     input_password_1 = input("sudo: ")
     while input_password_1 == password:
         user_input = input('> ')
-        final_before_encrypt_lsit = list(user_input)
+        user_covert_input = list(user_input)
         return_list = []
         if user_input == "exit":
              break
-        for i in final_before_encrypt_lsit:
+        if user_covert_input[-1] == "E":
+            for i in user_covert_input:
+                if i in Decrypter:
+                    return_list.append(Decrypter.get(i , "letter not found :("))
+            return_word = "". join(return_list)
+            print(return_word)
+        if user_covert_input[-1] != "E":
+            for i in user_covert_input :
                 try:
                     return_list.append(encrypt1[i])               
-                    return_sentence = "" . join(return_list)
-                    if len(final_before_encrypt_lsit) == len(list(return_sentence)):
+                    if len(user_covert_input) == len(return_list):
+                        return_list.append("E")
+                        return_sentence = "". join(return_list)
                         print(return_sentence)
                 except KeyError:
                     print("invalid characters")
@@ -60,15 +91,15 @@ elif input_username not in users:
         while uknown_user_password == password and x < 5:
                 x += 1
                 user_input = input('> ')
-                final_before_encrypt_lsit = list(user_input)
+                user_covert_input = list(user_input)
                 return_list = []
                 if user_input == "exit":
                      break
-                for i in final_before_encrypt_lsit:
+                for i in user_covert_input:
                     try:
                         return_list.append(encrypt1[i])               
                         return_sentence = "" . join(return_list)
-                        if len(final_before_encrypt_lsit) == len(list(return_sentence)):
+                        if len(user_covert_input) == len(list(return_sentence)):
                             print(return_sentence)
                     except KeyError:
                         print("invalid characters")

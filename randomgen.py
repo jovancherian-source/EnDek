@@ -6,3 +6,4 @@ x =0
 while x < 26:
     print(random.choice(symbols))
     x += 1
+
