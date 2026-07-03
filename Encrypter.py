@@ -27,23 +27,23 @@ if input_username in users:
     if input_password_1 == users[input_username]:
         connection = sqlite3.connect("encyption_keys.db")
         cursor = connection.cursor()
-        cursor.execute("""
-        CREATE TABLE IF NOT EXISTS encryptionkeys(
+        cursor.execute(f"""
+        CREATE TABLE IF NOT EXISTS "{input_username}"(
                     encryption_key TEXT PRIMARY KEY,
                     encryption_value TEXT)
         """)
-        cursor.execute("SELECT * FROM encryptionkeys ")
+        cursor.execute(f'SELECT * FROM "{input_username}"') 
         cheker = cursor.fetchall()
         if len(cheker) == 0 :
             user_request= input("would you like to enter your Decryption key(y/n): ")
             if user_request == "y":
                 user_encryption_key = input("key: ")
-                cursor.execute("DELETE FROM encryptionkeys ")
+                cursor.execute(f'DELETE FROM "{input_username}"')
                 updated_encryption_key = list_maker(user_encryption_key)
                 for key in updated_encryption_key:
-                    cursor.execute("INSERT INTO encryptionkeys( encryption_key , encryption_value) VALUES(?,?)", (key[0] , key[1]))
+                    cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                 print("Encryption key updated sucessfully...")
-                cursor.execute("SELECT * FROM encryptionkeys ")
+                cursor.execute(f'SELECT * FROM "{input_username}"')
                 encrypt_demo = cursor.fetchall()
                 encrypt1 = database_to_dict(encrypt_demo)
                 connection.commit()
@@ -53,15 +53,15 @@ if input_username in users:
                     random_generated_string = randomgenerator()
                     random_generated_list = list_maker(random_generated_string)
                     for key_letter in random_generated_list:
-                        cursor.execute("INSERT INTO encryptionkeys(encryption_key, encryption_value) VALUES(?,?)", (key_letter[0], key_letter[1]))
+                        cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                     print(random_generated_string)
-                    cursor.execute("SELECT * FROM encryptionkeys ")
+                    cursor.execute(f'SELECT * FROM "{input_username}"')
                     encrypt_demo = cursor.fetchall()
                     encrypt1 = database_to_dict(encrypt_demo)
                     connection.commit()
                     print("Encryption key was generated and was added as a key...")
         else:
-            cursor.execute("SELECT * FROM encryptionkeys ")
+            cursor.execute(f'SELECT * FROM "{input_username}"')
             encrypt_demo = cursor.fetchall()
             encrypt1 = database_to_dict(encrypt_demo)           
             Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -75,12 +75,12 @@ if input_username in users:
                 user_request= input("would you like to change your Decryption key/ Regenerate Encryption key(d/r): ")
                 if user_request == "d":
                     user_encryption_key = input("key: ")
-                    cursor.execute("DELETE FROM encryptionkeys ")
+                    cursor.execute(f'DELETE FROM "{input_username}"')
                     updated_encryption_key = list_maker(user_encryption_key)
                     for key in updated_encryption_key:
-                        cursor.execute("INSERT INTO encryptionkeys( encryption_key , encryption_value) VALUES(?,?)", (key[0] , key[1]))
+                        cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                     print("Encryption key updated sucessfully...")
-                    cursor.execute("SELECT * FROM encryptionkeys ")
+                    cursor.execute(f'SELECT * FROM "{input_username}"')
                     encrypt_demo = cursor.fetchall()
                     encrypt1 = database_to_dict(encrypt_demo)
                     Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -90,20 +90,20 @@ if input_username in users:
                     if user_random_generation_agreement == "y":
                         random_generated_string = randomgenerator()
                         random_generated_list = list_maker(random_generated_string)
-                        cursor.execute("DELETE FROM encryptionkeys ")                        
+                        cursor.execute(f'DELETE FROM "{input_username}"')
                         for key_letter in random_generated_list:
-                            cursor.execute("INSERT INTO encryptionkeys(encryption_key, encryption_value) VALUES(?,?)", (key_letter[0], key_letter[1]))
+                            cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                         print(random_generated_string)
-                        cursor.execute("SELECT * FROM encryptionkeys ")
+                        cursor.execute(f'SELECT * FROM "{input_username}"')
                         encrypt_demo = cursor.fetchall()
                         encrypt1 = database_to_dict(encrypt_demo)
                         Decrypter  = {value: key for key, value in encrypt1.items()}
                         connection.commit()
                         print("Encryption key was generated and was added as a key...")
                 elif user_request == "panic":
-                    cursor.execute("DELETE FROM encryptionkeys ")
+                    cursor.execute(f'DELETE FROM "{input_username}"') 
                     print("DataBase is clear")
-                    cursor.execute("SELECT * FROM encryptionkeys ")
+                    cursor.execute(f'SELECT * FROM "{input_username}"') 
                     encrypt_demo = cursor.fetchall()
                     encrypt1 = database_to_dict(encrypt_demo)
                     Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -111,11 +111,11 @@ if input_username in users:
                 elif user_request == "user":
                     command = input("are you sure you want to delete your user account(y/n): ")
                     if command == "y":
-                        cursor1.execute("DELETE FROM users WHERE username = (?)", (input_username,))
+                        cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
                         connection1.commit()
             if len(user_covert_input) !=0 :
                 if user_covert_input[-1] == "E" and user_input !="config":
-                    cursor1.execute("SELECT * FROM encryptionkeys ")
+                    cursor1.execute(f'SELECT * FROM "{input_username}"')
                     encrypt_demo = cursor1.fetchall()
                     encrypt1 = database_to_dict(encrypt_demo)
                     Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -140,9 +140,13 @@ elif input_username not in users:
     new_user = input("user not found. would you like to create a new user(y/n): ")
     if new_user == "y":
         new_user_password = getpass.getpass("password: ")
-        cursor1.execute("INSERT INTO users(username, password) VALUES(?,?)", (input_username, new_user_password))
-        connection1.commit()
-        print("user created successfully...")
+        recheck = getpass.getpass("Reenter password: ")
+        if new_user_password == recheck:
+            cursor1.execute("INSERT INTO users(username, password) VALUES(?,?)", (input_username, new_user_password))
+            connection1.commit()
+            print("user created successfully...")
+        else:
+            print("passwords do not match!!")
 
     elif new_user == "n":
         user_reponse = input("Do you have an encryption key(y/n): ")
@@ -199,9 +203,4 @@ elif input_username not in users:
                             if user_covert_input[-1] == "E":
                                 print("you cannot decrypt without a username")
                             else:
-                                print("invalid characters")
-
-
-         
-    
-          
+                                print("invalid characters")    
