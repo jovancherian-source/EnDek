@@ -1,4 +1,4 @@
-# 🔐 EnDek
+# EnDek
 
 EnDek is a terminal-based encryption application written in Python. It allows users to encrypt and decrypt English text using a unique encryption key. The project is intentionally designed as a command-line application, keeping it lightweight, simple, and easy to use.
 
