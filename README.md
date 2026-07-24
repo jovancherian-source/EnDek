@@ -1,46 +1,98 @@
-# EnDek
+# 🔐 EnDek
 
-EnDek is a terminal-based Python application that encrypts English text using a randomly generated encryption key. Since the program solves a simple task, it is intentionally designed as a command-line application rather than a graphical user interface.
+EnDek is a terminal-based encryption application written in Python. It allows users to encrypt and decrypt English text using a unique encryption key. The project is intentionally designed as a command-line application, keeping it lightweight, simple, and easy to use.
 
-The application includes a configuration menu where you can change the active encryption key. You can either generate a new random key or import a key shared by another EnDek user, making it easy to exchange encrypted messages with others.
+> **Project Status:** Beta 🚧
+
+---
+
+## Features
+
+- 🔒 Encrypt and decrypt English text
+- 🔑 Generate secure random encryption keys
+- 📥 Import encryption keys
+- 📤 Export encryption keys
+- ⚙️ Configuration menu for managing settings
+- 👤 User account system *(currently in development)*
+- 💻 Lightweight terminal interface
+
+---
+
+## Encryption Keys
+
+Every encrypted message is tied to an encryption key.
+
+From the **Configuration** menu, you can:
+
+- Change the active encryption key
+- Generate a new secure random key
+- Import an existing encryption key
+- Export your current encryption key
+
+This allows EnDek users to securely exchange encrypted messages by sharing the same encryption key.
+
+---
 
 ## User Accounts
 
-When user accounts are fully implemented, EnDek will prompt you to create a username and password the first time you launch the program. This feature is currently in development.
+The user account system is currently under development.
 
-For the current beta version, the default credentials are:
+When completed, EnDek will prompt you to create a username and password the first time it is launched.
 
-* **Username:** `jovancherian`
-* **Password:** `3e3e3e`
+### Default Beta Account
 
-You can change these values directly in the source code if you wish.
+| Username | Password |
+|----------|----------|
+| `jovancherian` | `3e3e3e` |
 
-If you do not want to create or use a user account, you can still encrypt messages by generating or entering an encryption key manually. However, decrypting messages requires logging in with a valid user account (the default account can be used).
+These credentials are included only for testing purposes and can be changed directly in the source code.
+
+---
 
 ## Installation
 
 ### Windows
 
-1. Install Python if it is not already installed.
-2. Install Git, or use GitHub Desktop if you prefer.
-3. Open Git Bash or another terminal and run:
+1. Install **Python 3**.
+2. Install **Git** (or GitHub Desktop).
+3. Open a terminal and run:
 
 ```bash
 git clone https://github.com/yourusername/EnDek.git
-cd EnDek/EnDek-main
+cd EnDek
 python Encrypter.py
 ```
 
 ### macOS
 
-1. Ensure Python 3 and Git are installed.
-2. Open Terminal and navigate to the folder where you want to install EnDek.
+1. Install **Python 3** and **Git**.
+2. Open **Terminal**.
 3. Run:
 
 ```bash
 git clone https://github.com/yourusername/EnDek.git
-cd EnDek/EnDek-main
+cd EnDek
 python3 Encrypter.py
 ```
 
+---
 
+## Current Status
+
+EnDek is an actively developed personal project. New features, improvements, and security enhancements are added regularly as the project evolves.
+
+---
+
+## Roadmap
+
+- [ ] Complete the user account system
+- [ ] Improve key management
+- [ ] Enhance terminal user interface
+- [ ] Add additional security improvements
+- [ ] Improve documentation
+
+---
+
+## License
+
+No license has been added yet.
