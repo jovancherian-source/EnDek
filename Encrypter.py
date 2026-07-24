@@ -1,9 +1,11 @@
 import sqlite3
-from logo import logos
+from IMGtext_files import logos
+import IMGtext_files
 import getpass
 from twod_list_maker import list_maker
 from  randomgen import randomgenerator
 from database_to_dict import database_to_dict
+from database_to_string import database_to_string
 logos()
 while True:
     input_username = input("username: ")
@@ -70,49 +72,60 @@ while True:
                 if user_input == "exit":
                     break
                 if user_input.lower() == "config":
-                    user_request= input("would you like to change your Decryption key/ Regenerate Encryption key(d/r): ")
-                    if user_request == "d":
-                        user_encryption_key = input("key: ")
-                        cursor.execute(f'DELETE FROM "{input_username}"')
-                        updated_encryption_key = list_maker(user_encryption_key)
-                        for key in updated_encryption_key:
-                            cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
-                        print("Encryption key updated sucessfully...")
-                        cursor.execute(f'SELECT * FROM "{input_username}"')
-                        encrypt_demo = cursor.fetchall()
-                        encrypt1 = database_to_dict(encrypt_demo)
-                        Decrypter  = {value: key for key, value in encrypt1.items()}
-                        connection.commit()
-                    elif user_request == "r":
-                        user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
-                        if user_random_generation_agreement == "y":
-                            random_generated_string = randomgenerator()
-                            random_generated_list = list_maker(random_generated_string)
+                    user_request= input(IMGtext_files.EnDek_config_logo())
+                    if user_request == "1":
+                        user_request_1 = IMGtext_files.EnDek_encyption_settings_menu()
+                        if user_request_1 == "1":
+                            user_encryption_key = input("key: ")
                             cursor.execute(f'DELETE FROM "{input_username}"')
-                            for key_letter in random_generated_list:
-                                cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
-                            print(random_generated_string)
+                            updated_encryption_key = list_maker(user_encryption_key)
+                            for key in updated_encryption_key:
+                                cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                            print("Encryption key updated sucessfully...")
                             cursor.execute(f'SELECT * FROM "{input_username}"')
                             encrypt_demo = cursor.fetchall()
                             encrypt1 = database_to_dict(encrypt_demo)
                             Decrypter  = {value: key for key, value in encrypt1.items()}
                             connection.commit()
-                            print("Encryption key was generated and was added as a key...")
-                    elif user_request == "panic":
-                        cursor.execute(f'DELETE FROM "{input_username}"') 
-                        print("DataBase is clear")
-                        cursor.execute(f'SELECT * FROM "{input_username}"') 
-                        encrypt_demo = cursor.fetchall()
-                        encrypt1 = database_to_dict(encrypt_demo)
-                        Decrypter  = {value: key for key, value in encrypt1.items()}
-                        connection.commit()
-                    elif user_request == "user":
-                        command = input("are you sure you want to delete your user account(y/n): ")
-                        if command == "y":
-                            cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
-                            connection1.commit()
-                    elif user_request == "log out":
-                        break
+                        elif user_request_1 == "2":
+                            user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
+                            if user_random_generation_agreement == "y":
+                                random_generated_string = randomgenerator()
+                                random_generated_list = list_maker(random_generated_string)
+                                cursor.execute(f'DELETE FROM "{input_username}"')
+                                for key_letter in random_generated_list:
+                                    cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
+                                print(random_generated_string)
+                                cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = cursor.fetchall()
+                                encrypt1 = database_to_dict(encrypt_demo)
+                                Decrypter  = {value: key for key, value in encrypt1.items()}
+                                connection.commit()
+                                print("Encryption key was generated and was added as a key...")
+                        elif user_request_1 == "3":
+                            user_database_security = getpass.getpass("sudo: ")
+                            if user_database_security == users[input_username]:
+                                cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = cursor.fetchall()
+                                returned_string = database_to_string(encrypt_demo)
+                                print("Encryption key: " + returned_string)
+                                print("Encryption key exported successfully...")
+                    elif user_request == "3":
+                        if user_request == "panic":
+                            cursor.execute(f'DELETE FROM "{input_username}"')
+                            connection.commit()
+                            print("DataBase is clear")
+                            cursor.execute(f'SELECT * FROM "{input_username}"') 
+                            encrypt_demo = cursor.fetchall()
+                            encrypt1 = database_to_dict(encrypt_demo)
+                            Decrypter  = {value: key for key, value in encrypt1.items()}
+                        elif user_request == "user":
+                            command = input("are you sure you want to delete your user account(y/n): ")
+                            if command == "y":
+                                cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
+                                connection1.commit()
+                        elif user_request == "log out":
+                            break
                 if len(user_covert_input) !=0 :
                     if user_covert_input[-1] == "E" and user_input !="config":
                         cursor1.execute(f'SELECT * FROM "{input_username}"')
@@ -204,3 +217,4 @@ while True:
                                     print("you cannot decrypt without a username")
                                 else:
                                     print("invalid characters")    
+
