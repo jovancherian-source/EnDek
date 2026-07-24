@@ -107,11 +107,15 @@ while True:
                             if user_database_security == users[input_username]:
                                 cursor.execute(f'SELECT * FROM "{input_username}"')
                                 encrypt_demo = cursor.fetchall()
-                                returned_string = database_to_string(encrypt_demo)
-                                print("Encryption key: " + returned_string)
-                                print("Encryption key exported successfully...")
+                                if len(encrypt_demo) == 0:
+                                    print("No encryption key found...")
+                                else:
+                                    returned_string = database_to_string(encrypt_demo)
+                                    print("Encryption key: " + returned_string)
+                                    print("Encryption key exported successfully...")
                     elif user_request == "3":
-                        if user_request == "panic":
+                        user_request_3 = IMGtext_files.Database_settings_menu()
+                        if user_request_3 == "1":
                             cursor.execute(f'DELETE FROM "{input_username}"')
                             connection.commit()
                             print("DataBase is clear")
@@ -119,12 +123,14 @@ while True:
                             encrypt_demo = cursor.fetchall()
                             encrypt1 = database_to_dict(encrypt_demo)
                             Decrypter  = {value: key for key, value in encrypt1.items()}
-                        elif user_request == "user":
-                            command = input("are you sure you want to delete your user account(y/n): ")
-                            if command == "y":
+                    elif user_request == "2":
+                        user_request_2 = IMGtext_files.Account_settings_menu()
+                        if user_request_2 == "2":
+                            conformation = IMGtext_files.Account_confirmation_menu()
+                            if conformation == "1":
                                 cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
                                 connection1.commit()
-                        elif user_request == "log out":
+                        elif user_request_2 == "1":
                             break
                 if len(user_covert_input) !=0 :
                     if user_covert_input[-1] == "E" and user_input !="config":

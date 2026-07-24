@@ -55,3 +55,72 @@ Enter selection: _""", end="")
     user_input_1= input()
 
     return user_input_1
+
+def Database_settings_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔═════════════════════════════════════╗
+║         Database Settings           ║
+╠═════════════════════════════════════╣
+║ ⚠ Warning                           ║
+║ Clearing the database permanently   ║
+║ removes all stored data.            ║
+╠═════════════════════════════════════╣
+║ 1 │ Clear Database                  ║
+║ 2 │ ← Back                          ║
+╚═════════════════════════════════════╝
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
+def Account_settings_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔═════════════════════════════════════╗
+║          Account Settings           ║
+╠═════════════════════════════════════╣
+║ General                             ║
+║ ─────────────────────────────────── ║
+║ 1 │ Log Out                         ║
+║                                     ║
+║ Danger Zone                         ║
+║ ─────────────────────────────────── ║
+║ 2 │ Delete Account                  ║
+║                                     ║
+║ 3 │ ← Back                          ║
+╚═════════════════════════════════════╝
+
+Select an option (1-3):
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
+def Account_confirmation_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔═════════════════════════════════════╗
+║         Delete Account              ║
+╠═════════════════════════════════════╣
+║ This action cannot be undone.       ║
+║                                     ║
+║ Your account and all associated     ║
+║ data will be permanently deleted.   ║
+║                                     ║
+║ 1 │ Yes, Delete My Account          ║
+║ 2 │ Cancel                          ║
+╚═════════════════════════════════════╝
+
+Select an option:
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
