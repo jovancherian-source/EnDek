@@ -2,10 +2,10 @@ import sqlite3
 from IMGtext_files import logos
 import IMGtext_files
 import getpass
-from twod_list_maker import list_maker
+from Converters import twod_list_maker
 from  randomgen import randomgenerator
-from database_to_dict import database_to_dict
-from database_to_string import database_to_string
+from Converters import database_to_dict
+from Converters import database_to_string
 logos()
 while True:
     input_username = input("username: ")
@@ -19,7 +19,7 @@ while True:
                 password TEXT)
     """)
     cursor1.execute("SELECT * FROM users ")
-    users = database_to_dict(cursor1.fetchall())
+    users = database_to_dict.database_to_dict(cursor1.fetchall())
 
 
     if input_username in users:
@@ -39,31 +39,31 @@ while True:
                 if user_request == "y":
                     user_encryption_key = input("key: ")
                     cursor.execute(f'DELETE FROM "{input_username}"')
-                    updated_encryption_key = list_maker(user_encryption_key)
+                    updated_encryption_key = twod_list_maker.list_maker(user_encryption_key)
                     for key in updated_encryption_key:
                         cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                     print("Encryption key updated sucessfully...")
                     cursor.execute(f'SELECT * FROM "{input_username}"')
                     encrypt_demo = cursor.fetchall()
-                    encrypt1 = database_to_dict(encrypt_demo)
+                    encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                     connection.commit()
                 elif user_request == "n":
                     user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
                     if user_random_generation_agreement == "y":
                         random_generated_string = randomgenerator()
-                        random_generated_list = list_maker(random_generated_string)
+                        random_generated_list = twod_list_maker.list_maker(random_generated_string)
                         for key_letter in random_generated_list:
                             cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                         print(random_generated_string)
                         cursor.execute(f'SELECT * FROM "{input_username}"')
                         encrypt_demo = cursor.fetchall()
-                        encrypt1 = database_to_dict(encrypt_demo)
+                        encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                         connection.commit()
                         print("Encryption key was generated and was added as a key...")
             else:
                 cursor.execute(f'SELECT * FROM "{input_username}"')
                 encrypt_demo = cursor.fetchall()
-                encrypt1 = database_to_dict(encrypt_demo)           
+                encrypt1 = database_to_dict.database_to_dict(encrypt_demo)           
                 Decrypter  = {value: key for key, value in encrypt1.items()}
             while True:
                 user_input = input('> ')
@@ -77,28 +77,31 @@ while True:
                         user_request_1 = IMGtext_files.EnDek_encyption_settings_menu()
                         if user_request_1 == "1":
                             user_encryption_key = input("key: ")
-                            cursor.execute(f'DELETE FROM "{input_username}"')
-                            updated_encryption_key = list_maker(user_encryption_key)
-                            for key in updated_encryption_key:
-                                cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
-                            print("Encryption key updated sucessfully...")
-                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                            encrypt_demo = cursor.fetchall()
-                            encrypt1 = database_to_dict(encrypt_demo)
-                            Decrypter  = {value: key for key, value in encrypt1.items()}
-                            connection.commit()
+                            if len(user_encryption_key) != 0:
+                                cursor.execute(f'DELETE FROM "{input_username}"')
+                                updated_encryption_key = twod_list_maker.list_maker(user_encryption_key)
+                                for key in updated_encryption_key:
+                                    cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                print("Encryption key updated sucessfully...")
+                                cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = cursor.fetchall()
+                                encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
+                                Decrypter  = {value: key for key, value in encrypt1.items()}
+                                connection.commit()
+                            elif len(user_encryption_key) == 0:
+                                print("Encryption key cannot be empty...")
                         elif user_request_1 == "2":
                             user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
                             if user_random_generation_agreement == "y":
                                 random_generated_string = randomgenerator()
-                                random_generated_list = list_maker(random_generated_string)
+                                random_generated_list = twod_list_maker.list_maker(random_generated_string)
                                 cursor.execute(f'DELETE FROM "{input_username}"')
                                 for key_letter in random_generated_list:
                                     cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                                 print(random_generated_string)
                                 cursor.execute(f'SELECT * FROM "{input_username}"')
                                 encrypt_demo = cursor.fetchall()
-                                encrypt1 = database_to_dict(encrypt_demo)
+                                encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                 Decrypter  = {value: key for key, value in encrypt1.items()}
                                 connection.commit()
                                 print("Encryption key was generated and was added as a key...")
@@ -110,7 +113,7 @@ while True:
                                 if len(encrypt_demo) == 0:
                                     print("No encryption key found...")
                                 else:
-                                    returned_string = database_to_string(encrypt_demo)
+                                    returned_string = database_to_string.database_to_string(encrypt_demo)
                                     print("Encryption key: " + returned_string)
                                     print("Encryption key exported successfully...")
                     elif user_request == "3":
@@ -121,7 +124,7 @@ while True:
                             print("DataBase is clear")
                             cursor.execute(f'SELECT * FROM "{input_username}"') 
                             encrypt_demo = cursor.fetchall()
-                            encrypt1 = database_to_dict(encrypt_demo)
+                            encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                             Decrypter  = {value: key for key, value in encrypt1.items()}
                     elif user_request == "2":
                         user_request_2 = IMGtext_files.Account_settings_menu()
@@ -136,7 +139,7 @@ while True:
                     if user_covert_input[-1] == "E" and user_input !="config":
                         cursor1.execute(f'SELECT * FROM "{input_username}"')
                         encrypt_demo = cursor1.fetchall()
-                        encrypt1 = database_to_dict(encrypt_demo)
+                        encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                         Decrypter  = {value: key for key, value in encrypt1.items()}
                         for i in user_covert_input:
                             if i in Decrypter:
@@ -171,8 +174,8 @@ while True:
             user_reponse = input("Do you have an encryption key(y/n): ")
             if user_reponse == "y":
                 key = input("Key: ")
-                unknown_user_two_d  = list_maker(key)
-                encrypt1 = database_to_dict(unknown_user_two_d)        
+                unknown_user_two_d  = twod_list_maker.list_maker(key)
+                encrypt1 = database_to_dict.database_to_dict(unknown_user_two_d)        
                 x = 0
                 while  x < 5:
                         x += 1
@@ -198,8 +201,8 @@ while True:
                 user_request= input("would you like to generate Encryption key(y/n): ")
                 if user_request == "y":
                     key = randomgenerator()
-                    two_dimentional = list_maker(key)
-                    dict_1 = database_to_dict(two_dimentional)
+                    two_dimentional = twod_list_maker.list_maker(key)
+                    dict_1 = database_to_dict.database_to_dict(two_dimentional)
                     print(key)
                     print("command successful...")
                     x =0 
