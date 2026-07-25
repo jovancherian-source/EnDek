@@ -1,51 +1,74 @@
 # EnDek
 
-EnDek is a terminal-based encryption application written in Python. It allows users to encrypt and decrypt English text using a unique encryption key. The project is intentionally designed as a command-line application, keeping it lightweight, simple, and easy to use.
+EnDek is a lightweight terminal-based encryption tool written in Python. It lets you encrypt and decrypt text using a custom or randomly generated key, and it now includes a simple account system and a menu-driven configuration experience.
 
-> **Project Status:** Beta 🚧
+> **Project Status:** Active development 🚧
+
+---
+
+## New Features
+
+- 🔐 Log in and log out of the application
+- 👤 Create new user accounts
+- 🧭 A user-friendly configuration menu for managing settings
+- 🛡️ Database-level access protection through account authentication
+- 🎲 Generate secure random encryption keys
+- 🔄 Encrypt and decrypt text using per-user stored keys
+
+---
+
+## How It Works
+
+1. Launch the app from the terminal.
+2. Enter your username.
+3. If the account already exists, log in with your password.
+4. If the account does not exist, you can create a new one.
+5. Use the configuration menu to manage your encryption key.
+6. Encrypt or decrypt text from the main prompt.
 
 ---
 
 ## Features
 
 - 🔒 Encrypt and decrypt English text
-- 🔑 Generate secure random encryption keys
-- 📥 Import encryption keys
-- 📤 Export encryption keys
-- ⚙️ Configuration menu for managing settings
-- 👤 User account system *(currently in development)*
-- 💻 Lightweight terminal interface
+- 🔑 Use a custom encryption key
+- 🎲 Generate a new random encryption key
+- 📤 Export the current encryption key
+- 🗑️ Clear the stored key data for the current account
+- 👤 Delete an account from the user database
+- 💾 Store data locally in SQLite database files
 
 ---
 
-## Encryption Keys
+## Configuration Menu
 
-Every encrypted message is tied to an encryption key.
+The configuration menu is now menu-driven and intuitive, so it does not require much setup or extra documentation. From the menu, you can:
 
-From the **Configuration** menu, you can:
-
-- Change the active encryption key
-- Generate a new secure random key
-- Import an existing encryption key
-- Export your current encryption key
-
-This allows EnDek users to securely exchange encrypted messages by sharing the same encryption key.
+- update the active encryption key
+- generate a new random key
+- export the current key
+- manage account options
+- clear stored database data
 
 ---
 
-## User Accounts
+## Account System
 
-The user account system is currently under development.
+When you start EnDek:
 
-When completed, EnDek will prompt you to create a username and password the first time it is launched.
+- existing users can log in
+- new users can create an account
+- accounts are stored in a local SQLite database file named users.db
+- each user has their own encryption key table in encyption_keys.db
 
-### Default Beta Account
+---
 
-| Username | Password |
-|----------|----------|
-| `jovancherian` | `3e3e3e` |
+## Security Notes
 
-These credentials are included only for testing purposes and can be changed directly in the source code.
+- Access to your encryption key data is protected by username and password authentication.
+- The app uses local SQLite databases rather than a remote service.
+- Exporting keys requires password confirmation.
+- Use a strong password for your account to help protect your stored keys.
 
 ---
 
@@ -53,8 +76,8 @@ These credentials are included only for testing purposes and can be changed dire
 
 ### Windows
 
-1. Install **Python 3**.
-2. Install **Git** (or GitHub Desktop).
+1. Install Python 3.
+2. Install Git (or GitHub Desktop).
 3. Open a terminal and run:
 
 ```bash
@@ -65,8 +88,8 @@ python Encrypter.py
 
 ### macOS
 
-1. Install **Python 3** and **Git**.
-2. Open **Terminal**.
+1. Install Python 3 and Git.
+2. Open Terminal.
 3. Run:
 
 ```bash
@@ -77,22 +100,6 @@ python3 Encrypter.py
 
 ---
 
-## Current Status
+## Project Status
 
 EnDek is an actively developed personal project. New features, improvements, and security enhancements are added regularly as the project evolves.
-
----
-
-## Roadmap
-
-- [ ] Complete the user account system
-- [ ] Improve key management
-- [ ] Enhance terminal user interface
-- [ ] Add additional security improvements
-- [ ] Improve documentation
-
----
-
-## License
-
-No license has been added yet.
