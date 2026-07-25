@@ -32,6 +32,7 @@ while True:
                         encryption_key TEXT PRIMARY KEY,
                         encryption_value TEXT)
             """)
+            connection.commit()
             cursor.execute(f'SELECT * FROM "{input_username}"') 
             cheker = cursor.fetchall()
             if len(cheker) == 0 :
@@ -133,13 +134,16 @@ while True:
                             if conformation == "1":
                                 cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
                                 connection1.commit()
+                                cursor.execute(f'DELETE FROM "{input_username}"')
+                                connection.commit()
+                                print("Account deleted successfully...")
                         elif user_request_2 == "1":
                             break
                 if len(user_covert_input) !=0 :
                     if user_covert_input[-1] == "E" and user_input !="config":
-                        cursor1.execute(f'SELECT * FROM "{input_username}"')
-                        encrypt_demo = cursor1.fetchall()
-                        encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
+                        cursor.execute(f'SELECT * FROM "{input_username}"')
+                        encrypt_demo = cursor.fetchall()
+                        encrypt = database_to_dict.database_to_dict(encrypt_demo)
                         Decrypter  = {value: key for key, value in encrypt1.items()}
                         for i in user_covert_input:
                             if i in Decrypter:
