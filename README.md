@@ -23,8 +23,10 @@ EnDek is a lightweight terminal-based encryption tool written in Python. It lets
 2. Enter your username.
 3. If the account already exists, log in with your password.
 4. If the account does not exist, you can create a new one.
-5. Use the configuration menu to manage your encryption key.
-6. Encrypt or decrypt text from the main prompt.
+5. You do not need to log in or create an account to encrypt or decrypt text.
+6. Creating an account only creates it locally on your device, where your encryption key can be remembered and securely stored for later reuse.
+7. Use the configuration menu to manage your encryption key.
+8. Encrypt or decrypt text from the main prompt.
 
 ---
 
@@ -56,10 +58,12 @@ The configuration menu is now menu-driven and intuitive, so it does not require 
 
 When you start EnDek:
 
-- existing users can log in
-- new users can create an account
+- you do not need to be a user to encrypt or decrypt text
+- creating an account is optional and only creates it locally on your device
 - accounts are stored in a local SQLite database file named users.db
 - each user has their own encryption key table in encyption_keys.db
+- the main purpose of creating an account is so your encryption key can be remembered, securely stored, and reused later
+- being a user is not required, but it can open up a world of possibilities for smoother and more personalized encryption workflows
 
 ---
 

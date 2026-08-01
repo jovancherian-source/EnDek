@@ -46,8 +46,9 @@ def EnDek_encyption_settings_menu():
 ├─────────────────────────────────────────────┤
 │ 1 │ enter custom key                        │
 │ 2 │ Generate Secure Random Key              │
-│ 3 │ Export Key                              │
-│ 4 │ Back                                    │
+| 3 │ Scramble settings                       │
+│ 4 │ Export Key                              │
+│ 5 │ Back                                    │
 └─────────────────────────────────────────────┘
 
 Enter selection: _""", end="")
@@ -119,6 +120,46 @@ def Account_confirmation_menu():
 ╚═════════════════════════════════════╝
 
 Select an option:
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
+def first_Scramble_settings_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔══════════════════════════════════════╗
+║          Scramble Settings           ║
+╠══════════════════════════════════════╣
+║ 1 │ Enable Text Scrambling           ║
+║──────────────────────────────────────║
+║ 2 │ ← Back                           ║
+╚══════════════════════════════════════╝
+
+Select an option (1-2):
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
+def Scramble_settings_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔══════════════════════════════════════╗
+║         Scrambler Settings           ║
+╠══════════════════════════════════════╣
+║ 1 │ Change Scrambler                 ║
+║──────────────────────────────────────║
+║ 2 │ Disable Scrambler                ║
+║──────────────────────────────────────║
+║ 3 │ ← Back                           ║
+╚══════════════════════════════════════╝
+
+Select an option (1-3):
 """, end="")
     print(reset, end="")
     user_input_1= input(r"Enter selection: _")
