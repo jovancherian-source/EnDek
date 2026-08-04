@@ -106,10 +106,9 @@ while True:
                         encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                         connection.commit()
                         print("Encryption key was generated and was added as a key...")
-                        return encrypt1
-                
+                        return encrypt1          
                 if user_request == "n":
-                    login_random_key_generation()
+                    encrypt1 = login_random_key_generation()
 
             else:
                 cursor.execute(f'SELECT * FROM "{input_username}"')
@@ -364,4 +363,3 @@ while True:
                                     print("you cannot decrypt without a username")
                                 else:
                                     print("invalid characters")    
-
