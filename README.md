@@ -2,7 +2,7 @@
 
 EnDek is a lightweight terminal-based encryption tool written in Python. It lets you encrypt and decrypt text using a custom or randomly generated key, and it now includes a simple account system and a menu-driven configuration experience.
 
-> **Project Status:** Active development 🚧
+> **Project Status:** partial development 🚧
 
 ---
 
