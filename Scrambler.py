@@ -23,7 +23,8 @@ def scrambler(Encryption_key, username):
         """)
         cursor.execute(f"DELETE FROM '{username}'")
         index_numbers = list(range(len(Encryption_key)))
-        random.shuffle(index_numbers)
+        secure_random = random.SystemRandom()
+        secure_random.shuffle(index_numbers)
         list_encryption_key = list(Encryption_key)
         return_encryption_key = []
         for index in index_numbers:
