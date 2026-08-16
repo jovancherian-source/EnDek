@@ -8,12 +8,12 @@ EnDek is a lightweight terminal-based encryption tool written in Python. It lets
 
 ## New Features
 
-- 🔐 Log in and log out of the application.
-- 👤 Create new user accounts.
-- 🧭 A user-friendly configuration menu for managing settings.
-- 🛡️ Database-level access protection through account authentication.
-- 🎲 Generate secure random encryption keys.
-- 🔄 Encrypt and decrypt text using per-user stored keys.
+- 🔐 Log in and log out of the application
+- 👤 Create new user accounts
+- 🧭 A user-friendly configuration menu for managing settings
+- 🛡️ Database-level access protection through account authentication
+- 🎲 Generate secure random encryption keys
+- 🔄 Encrypt and decrypt text using per-user stored keys
 
 ---
 
