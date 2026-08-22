@@ -12,6 +12,7 @@ def pre_scrambler(Encryption_key, username):
         for item in scrambler_key:
             return_encryption_key.append(Encryption_key[item[1]])
         return_encryption_key.append('S')
+        connection.commit()
         return ["".join(return_encryption_key), return_index_numbers]
 def scrambler(Encryption_key, username):
         connection = sqlite3.connect("scrambler.db")
@@ -54,6 +55,7 @@ def new_encryption_key_unscrambler(scrambeled_encryption_key, unscrambler , user
     sorted_index_numbers = sorted(usable_index_numbers, key=lambda x: x[1])
     for item in sorted_index_numbers:
          return_encryption_key.append(scrambeled_encryption_key[item[0]])
+    connection.commit()
     return "".join(return_encryption_key)
 def user_panic(username):
     connection = sqlite3.connect("scrambler.db")
@@ -69,4 +71,13 @@ def unscrambler(scrambled_encryption_key, username):
     sorted_index_numbers = sorted(index_numbers, key=lambda x: x[1])
     for item in sorted_index_numbers:
          return_encryption_key.append(scrambled_encryption_key[item[0]])
+    connection.commit()
     return "".join(return_encryption_key)
+def scrambeler_updater(scrambler_key, username):
+    connection = sqlite3.connect("scrambler.db")
+    cursor = connection.cursor()
+    cursor.execute(f"DELETE FROM '{username}'")
+    index_numbers = scrambler_key.strip('[]').split(', ')
+    for index in range(len(index_numbers)):
+        cursor.execute(f"INSERT INTO '{username}'(position, index_number) VALUES(?, ?)", (index, index_numbers[index]))
+    connection.commit()

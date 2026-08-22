@@ -165,3 +165,37 @@ Select an option (1-3):
     user_input_1= input(r"Enter selection: _")
 
     return user_input_1
+
+def new_Scramble_settings_menu():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""══════════════════════════════════════
+          SCRAMBLER KEY
+══════════════════════════════════════
+
+[1] Enter Custom Scrambler Key
+[2] Generate Random Scrambler Key
+[3] Cancel
+
+Select an option: 
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
+def new_Scramble_key_for_pre_user():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""══════════════════════════════════════
+       CUSTOM SCRAMBLER KEY
+══════════════════════════════════════
+
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"> ")
+
+    return user_input_1
