@@ -12,8 +12,18 @@ from Scrambler import user_panic
 from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
 from argon2 import PasswordHasher
+import string
 CLI.logos()
 
+EnDek_verison = "2.7.0"
+
+
+class InvalidScramblerError(Exception):
+    pass
+class InvalidEncryptionKeyError(Exception):
+    pass
+class EmptyInputError(Exception):
+    pass
 def password_hashing(password):
     ph = PasswordHasher()
     return ph.hash(str(password))
@@ -24,12 +34,15 @@ def password_verification(password, hashed_password):
         return True
     except Exception:
         return False
-
+    
 def main():
+    class AccoutDeletion(Exception):
+        pass
     while True:
         input_username = input("username: ")
-
-
+        if not all(char in string.ascii_letters for char in input_username):
+            print("please only plain English letters are accepted for usernames! Spaces are NOT allowed.")
+            main()
         connection1 = sqlite3.connect("users.db")
         cursor1 = connection1.cursor()
         cursor1.execute("""
@@ -56,9 +69,13 @@ def main():
                 cursor.execute(f'SELECT * FROM "{input_username}"') 
                 cheker = cursor.fetchall()
                 try:
-                    if len(cheker) == 0 :
+                    trial_times = 0
+                    accept_checker = False
+                    while len(cheker) == 0 and trial_times < 5 and accept_checker != True:
+                        trial_times += 1
                         user_request= input("would you like to enter your Decryption key(y/n): ")
                         if user_request == "y":
+                            accept_checker = True
                             user_encryption_key = input("key: ")
                             def login_user_scrambler_key():
                                 cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
@@ -100,6 +117,7 @@ def main():
                             connection1.commit()
                             user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
                             if user_random_generation_agreement == "y":
+                                accept_checker = True
                                 random_generated_string = randomgenerator()
                                 random_generated_list = twod_list_maker.list_maker(random_generated_string)
                                 for key_letter in random_generated_list:
@@ -110,10 +128,19 @@ def main():
                                 encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                 connection.commit()
                                 print("Encryption key was generated and was added as a key...")
-                                return encrypt1          
+                                return encrypt1, accept_checker
+                            else:
+                                accept_checker = False
+                                return False, accept_checker          
                         if user_request == "n":
-                            encrypt1 = login_random_key_generation()
-
+                            loger_checker = login_random_key_generation()
+                            if loger_checker[1] != False:
+                                encrypt1 = loger_checker[0]
+                                accept_checker = True
+                            elif loger_checker[1] == False:
+                                accept_checker = loger_checker[1]
+                    if trial_times > 4:
+                        print("you have no enrcyption key!!")
                     else:
                         cursor.execute(f'SELECT * FROM "{input_username}"')
                         db_global_user_encryption_key = cursor.fetchall()
@@ -124,8 +151,10 @@ def main():
                         user_input = input('> ')
                         user_covert_input = list(user_input)
                         return_list = []
-                        if user_input == "exit":
-                            break
+                        if user_input == "/exit":
+                            return
+                        if user_input == "/logout":
+                            break                            
                         if user_input.lower() == "/config":
                             user_request= input(CLI.EnDek_config_logo())
                             if user_request == "1":
@@ -206,8 +235,11 @@ def main():
                                             scrambler_changer_user_request = CLI.new_Scramble_settings_menu()
                                             if scrambler_changer_user_request == "1":
                                                 scrambler_key_new = CLI.new_Scramble_key_for_pre_user()
-                                                new_encryption_scrambler = scrambeler_updater(scrambler_key= scrambler_key_new, username = input_username)
-                                                print("Scrambler key updated successfully...")
+                                                if len(scrambler_key_new) == 0:
+                                                    print("Encryption key cannot be empty...")
+                                                else:
+                                                    new_encryption_scrambler = scrambeler_updater(scrambler_key= scrambler_key_new, username = input_username)
+                                                    print("Scrambler key updated successfully...")
                                             elif scrambler_changer_user_request == "2":
                                                 new_encryption_scrambler = scrambler(Encryption_key = global_user_encryption_key, username = input_username)
                                                 print("Encryption key updated successfully...")
@@ -263,18 +295,36 @@ def main():
                                 if user_request_2 == "2":
                                     conformation = CLI.Account_confirmation_menu()
                                     if conformation == "1":
-                                        cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
-                                        connection1.commit()
                                         cursor.execute(f'DELETE FROM "{input_username}"')
                                         connection.commit()
-                                        cursor.execute(f'SELECT * FROM "{input_username}"') 
-                                        encrypt_demo = cursor.fetchall()
-                                        user_panic(input_username)
-                                        encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
-                                        Decrypter  = {value: key for key, value in encrypt1.items()}
-                                        print("Account deleted successfully...")
+                                        is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                        if is_using_srambler == 1:
+                                            user_panic(input_username)
+                                        cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
+                                        connection1.commit()
+                                        cursor1.execute("SELECT * FROM users ")
+                                        users = database_to_dict.database_to_dict(cursor1.fetchall())
+                                        raise AccoutDeletion()                                       
                                 elif user_request_2 == "1":
                                     break
+                            elif user_request == "4":
+                                CLI.logos()
+                                print("Version " + EnDek_verison)
+                                print("Encryption key status: currently running")
+                                cursor1.execute("SELECT * FROM users ")
+                                users_number = len(cursor1.fetchall())
+                                if users_number != 1:
+                                    print(f"There are {users_number} local users.")
+                                else:
+                                    print("There is 1 local user.")
+                                is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                if is_using_srambler == 1:
+                                    print("Scrambler status: Enabled")
+                                elif is_using_srambler == 0:
+                                    print("Scrambler status: Disabled")
+                                    
+                                    
+                                
                         if len(user_covert_input) !=0 :
                             if user_covert_input[-1] == "E" and user_input !="/config":
                                 cursor.execute(f'SELECT * FROM "{input_username}"')
@@ -296,8 +346,11 @@ def main():
                                             print(return_sentence)
                                     except KeyError:
                                         print("invalid characters")
+                except AccoutDeletion:
+                    print("account deleted sucessfully...")
                 except Exception as e:
                     print(f"error occured: {e}")
+                    print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
             elif input_password_1 != users.get(input_username):
                 print("wrong password!!")
         elif input_username not in users:
