@@ -14,6 +14,7 @@ from Scrambler import scrambeler_updater
 from argon2 import PasswordHasher
 import string
 CLI.logos()
+# test 2 for beta branch PR
 
 EnDek_verison = "2.7.0"
 EnDek_name = "Ludicrous"
@@ -389,7 +390,6 @@ def main():
                     print("user created successfully...")
                 else:
                     print("passwords do not match!!")
-
             elif new_user == "n":
                 user_reponse = input("Do you have an encryption key(y/n): ")
                 if user_reponse == "y":
