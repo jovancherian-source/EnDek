@@ -389,7 +389,7 @@ def main():
                     print("user created successfully...")
                 else:
                     print("passwords do not match!!")
-
+            # beta branch
             elif new_user == "n":
                 user_reponse = input("Do you have an encryption key(y/n): ")
                 if user_reponse == "y":
