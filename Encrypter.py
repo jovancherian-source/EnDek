@@ -16,13 +16,15 @@ import string
 CLI.logos()
 
 EnDek_verison = "2.7.0"
-
+EnDek_name = "Ludicrous"
 
 class InvalidScramblerError(Exception):
     pass
 class InvalidEncryptionKeyError(Exception):
     pass
 class EmptyInputError(Exception):
+    pass
+class AccoutDeletion(Exception):
     pass
 def password_hashing(password):
     ph = PasswordHasher()
@@ -34,99 +36,106 @@ def password_verification(password, hashed_password):
         return True
     except Exception:
         return False
-    
 def main():
-    class AccoutDeletion(Exception):
-        pass
     while True:
+        # user authentication and user database connection
         input_username = input("username: ")
+        if input_username == "/exit":
+            return
         if not all(char in string.ascii_letters for char in input_username):
             print("please only plain English letters are accepted for usernames! Spaces are NOT allowed.")
             main()
-        connection1 = sqlite3.connect("users.db")
-        cursor1 = connection1.cursor()
-        cursor1.execute("""
+        user_db_connection = sqlite3.connect("users.db")
+        user_db_cursor = user_db_connection.cursor()
+        user_db_cursor.execute("""
         CREATE TABLE IF NOT EXISTS users(
                     username TEXT PRIMARY KEY,
                     password TEXT,
                     scrambler BOOLEAN)
         """)
-        cursor1.execute("SELECT * FROM users ")
-        users = database_to_dict.database_to_dict(cursor1.fetchall())
+        user_db_cursor.execute("SELECT * FROM users ")
+        users = database_to_dict.database_to_dict(user_db_cursor.fetchall())
 
 
         if input_username in users:
+            # password manager, authentication and database connection.
             input_password_1 = getpass.getpass("sudo: ")
             if password_verification(input_password_1, users[input_username]):
-                connection = sqlite3.connect("encyption_keys.db")
-                cursor = connection.cursor()
-                cursor.execute(f"""
+                input_password_1 = ""
+                encryption_key_db_connection = sqlite3.connect("encyption_keys.db")
+                encryption_key_cursor = encryption_key_db_connection.cursor()
+                encryption_key_cursor.execute(f"""
                 CREATE TABLE IF NOT EXISTS "{input_username}"(
                             encryption_key TEXT PRIMARY KEY,
                             encryption_value TEXT)
                 """)
-                connection.commit()
-                cursor.execute(f'SELECT * FROM "{input_username}"') 
-                cheker = cursor.fetchall()
+                encryption_key_db_connection.commit()
+                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"') 
+                cheker = encryption_key_cursor.fetchall()
                 try:
                     trial_times = 0
                     accept_checker = False
                     while len(cheker) == 0 and trial_times < 5 and accept_checker != True:
+                        # first time user encryption key setting
                         trial_times += 1
                         user_request= input("would you like to enter your Decryption key(y/n): ")
                         if user_request == "y":
                             accept_checker = True
                             user_encryption_key = input("key: ")
+                            # userm log-in encryption key with scrambler key
                             def login_user_scrambler_key():
-                                cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
-                                connection1.commit()
+                                user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
+                                user_db_connection.commit()
                                 unscrambler_key = input("Scrambler Key: ")
                                 user_encryption_key_unscrambled = new_encryption_key_unscrambler(scrambeled_encryption_key = user_encryption_key, unscrambler = unscrambler_key , username = input_username)
                                 user_encryption_key_unscrambled = letter_remover.LetterFunctions.letter_adder(user_encryption_key_unscrambled)
-                                cursor.execute(f'DELETE FROM "{input_username}"')
+                                encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                 updated_encryption_key = twod_list_maker.list_maker(user_encryption_key_unscrambled)
                                 for key in updated_encryption_key:
-                                    cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                    encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                                 print("Encryption key added sucessfully...")
-                                cursor.execute(f'SELECT * FROM "{input_username}"')
-                                encrypt_demo = cursor.fetchall()
+                                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = encryption_key_cursor.fetchall()
                                 encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
-                                connection.commit()
+                                encryption_key_db_connection.commit()
                                 return encrypt1
+                            # user log-in encryption key without scrambler key
                             def login_user_encyption_key():
-                                cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
-                                connection1.commit()
+                                user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
+                                user_db_connection.commit()
                                 user_encryption_key = letter_remover.LetterFunctions.letter_adder(user_encryption_key)
-                                cursor.execute(f'DELETE FROM "{input_username}"')
+                                encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                 updated_encryption_key = twod_list_maker.list_maker(user_encryption_key)
                                 for key in updated_encryption_key:
-                                    cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                    encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                                 print("Encryption key added sucessfully...")
-                                cursor.execute(f'SELECT * FROM "{input_username}"')
-                                encrypt_demo = cursor.fetchall()
+                                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = encryption_key_cursor.fetchall()
                                 encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
-                                connection.commit()
-                                connection1.commit()
+                                encryption_key_db_connection.commit()
+                                user_db_connection.commit()
                                 return encrypt1
+                            # cheker pipe line for user enryption key 
                             if user_encryption_key[-1] == "S":
                                 encrypt1 = login_user_scrambler_key()
                             elif user_encryption_key[-1] != "S":    
                                 encrypt1 = login_user_encyption_key()
+                        # auto generating encryption key for first time log-in
                         def login_random_key_generation():
-                            cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
-                            connection1.commit()
+                            user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
+                            user_db_connection.commit()
                             user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
                             if user_random_generation_agreement == "y":
                                 accept_checker = True
                                 random_generated_string = randomgenerator()
                                 random_generated_list = twod_list_maker.list_maker(random_generated_string)
                                 for key_letter in random_generated_list:
-                                    cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
+                                    encryption_key_cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                                 print(letter_remover.LetterFunctions.letter_remover(random_generated_string))
-                                cursor.execute(f'SELECT * FROM "{input_username}"')
-                                encrypt_demo = cursor.fetchall()
+                                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = encryption_key_cursor.fetchall()
                                 encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
-                                connection.commit()
+                                encryption_key_db_connection.commit()
                                 print("Encryption key was generated and was added as a key...")
                                 return encrypt1, accept_checker
                             else:
@@ -141,9 +150,10 @@ def main():
                                 accept_checker = loger_checker[1]
                     if trial_times > 4:
                         print("you have no enrcyption key!!")
+                    # user encryption key fething form the database 
                     else:
-                        cursor.execute(f'SELECT * FROM "{input_username}"')
-                        db_global_user_encryption_key = cursor.fetchall()
+                        encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                        db_global_user_encryption_key = encryption_key_cursor.fetchall()
                         global_user_encryption_key = letter_remover.LetterFunctions.letter_remover(database_to_string.database_to_string(db_global_user_encryption_key))
                         encrypt1 = database_to_dict.database_to_dict(db_global_user_encryption_key)           
                         Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -154,81 +164,90 @@ def main():
                         if user_input == "/exit":
                             return
                         if user_input == "/logout":
-                            break                            
+                            break        
+                        # config menu setting
                         if user_input.lower() == "/config":
                             user_request= input(CLI.EnDek_config_logo())
+                            # Encryption Settings menu
                             if user_request == "1":
                                 user_request_1 = CLI.EnDek_encyption_settings_menu()
+                                # input for custom encryption key
                                 if user_request_1 == "1":
                                     pre_user_encryption_key = input("key: ")
                                     user_encryption_key = list(pre_user_encryption_key)
                                     if len(user_encryption_key) != 0:
+                                        # with scrambler 
                                         if user_encryption_key[-1] == "S":
-                                            cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
+                                            user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
                                             unscrambler_key = input("Scrambler Key: ")
                                             user_encryption_key_unscrambled = new_encryption_key_unscrambler(scrambeled_encryption_key = pre_user_encryption_key, unscrambler = unscrambler_key , username = input_username)
                                             user_encryption_key_unscrambled = letter_remover.LetterFunctions.letter_adder(user_encryption_key_unscrambled)
-                                            cursor.execute(f'DELETE FROM "{input_username}"')
+                                            encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                             updated_encryption_key = twod_list_maker.list_maker(user_encryption_key_unscrambled)
                                             for key in updated_encryption_key:
-                                                cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                                encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                                             print("Encryption key updated sucessfully...")
-                                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                                            encrypt_demo = cursor.fetchall()
+                                            encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                            encrypt_demo = encryption_key_cursor.fetchall()
                                             encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                             Decrypter  = {value: key for key, value in encrypt1.items()}
-                                            connection.commit()
-                                            connection1.commit()
+                                            encryption_key_db_connection.commit()
+                                            user_db_connection.commit()
+                                        #without scrambler 
                                         elif user_encryption_key[-1] != "S":
-                                            cursor.execute(f'DELETE FROM "{input_username}"')
+                                            encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                             updated_encryption_key = twod_list_maker.list_maker(user_encryption_key)
                                             for key in updated_encryption_key:
-                                                cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                                encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                                             print("Encryption key updated sucessfully...")
-                                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                                            encrypt_demo = cursor.fetchall()
+                                            encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                            encrypt_demo = encryption_key_cursor.fetchall()
                                             encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                             Decrypter  = {value: key for key, value in encrypt1.items()}
-                                            connection.commit()
+                                            encryption_key_db_connection.commit()
                                     elif len(user_encryption_key) == 0:
                                         print("Encryption key cannot be empty...")
+                                #Generate Secure Random Key menu
                                 elif user_request_1 == "2":
                                     user_random_generation_agreement = input("Would you like to generate a random Encryption key(y/n): ")
                                     if user_random_generation_agreement == "y":
-                                        is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                        is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                        # generating random encryption with scramblers
                                         if is_using_srambler == 1:
-                                            cursor.execute(f'DELETE FROM "{input_username}"')
+                                            encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                             random_generated_string = randomgenerator()
                                             random_generated_list = twod_list_maker.list_maker(random_generated_string)
                                             for key_letter in random_generated_list:
-                                                cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
+                                                encryption_key_cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                                             random_generated_string_full = letter_remover.LetterFunctions.letter_remover(random_generated_string)
                                             scrambled_encyption_key_output = pre_scrambler(random_generated_string_full, input_username)
                                             print(scrambled_encyption_key_output[0])
                                             print(scrambled_encyption_key_output[1])
-                                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                                            encrypt_demo = cursor.fetchall()
+                                            encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                            encrypt_demo = encryption_key_cursor.fetchall()
                                             encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                             Decrypter  = {value: key for key, value in encrypt1.items()}
-                                            connection.commit()
+                                            encryption_key_db_connection.commit()
                                             print("Encryption key was generated and was added as a key...")
+                                        # generating random encryption without scramblers
                                         elif is_using_srambler == 0:
                                             random_generated_string = randomgenerator()
                                             random_generated_list = twod_list_maker.list_maker(random_generated_string)
-                                            cursor.execute(f'DELETE FROM "{input_username}"')
+                                            encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
                                             for key_letter in random_generated_list:
-                                                cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
+                                                encryption_key_cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                                             random_generated_string_full = letter_remover.LetterFunctions.letter_remover(random_generated_string)
                                             print(random_generated_string_full)
-                                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                                            encrypt_demo = cursor.fetchall()
+                                            encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                            encrypt_demo = encryption_key_cursor.fetchall()
                                             encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                             Decrypter  = {value: key for key, value in encrypt1.items()}
-                                            connection.commit()
-                                        print("Encryption key was generated and was added as a key...")
+                                            encryption_key_db_connection.commit()
+                                            print("Encryption key was generated and was added as a key...")
+                                # Database Settings menu
                                 elif user_request_1 == "3":
-                                    cursor1.execute("SELECT scrambler FROM users WHERE username = ? " , (input_username,))
-                                    scrambler_status = cursor1.fetchone()[0]
+                                    user_db_cursor.execute("SELECT scrambler FROM users WHERE username = ? " , (input_username,))
+                                    scrambler_status = user_db_cursor.fetchone()[0]
                                     if scrambler_status == 1:
                                         user_request_for_pre_scrambler = CLI.Scramble_settings_menu()
                                         if user_request_for_pre_scrambler == "1":
@@ -245,15 +264,15 @@ def main():
                                                 print("Encryption key updated successfully...")
                                                 print("New Scrambler key: " + str(new_encryption_scrambler[1]))
                                         elif user_request_for_pre_scrambler == "2":
-                                            cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
-                                            connection1.commit()
+                                            user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
+                                            user_db_connection.commit()
                                     elif scrambler_status == 0 or scrambler_status is None:
                                         user_request_scrambler = CLI.first_Scramble_settings_menu()
                                         if user_request_scrambler == "1":
-                                            cursor1.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
-                                            connection1.commit()
-                                            cursor.execute(f'SELECT * FROM "{input_username}"')
-                                            scrambler_encryption_key = cursor.fetchall()
+                                            user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
+                                            user_db_connection.commit()
+                                            encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                            scrambler_encryption_key = encryption_key_cursor.fetchall()
                                             scrambler_encryption_key_2 = letter_remover.LetterFunctions.letter_remover(database_to_string.database_to_string(scrambler_encryption_key))
                                             scrambled_encyption_key_output = scrambler(scrambler_encryption_key_2, input_username)
                                             print(scrambled_encyption_key_output[0])
@@ -261,12 +280,12 @@ def main():
                                 elif user_request_1 == "4":
                                     user_database_security = getpass.getpass("sudo: ")
                                     if password_verification(user_database_security, users[input_username]):
-                                        cursor.execute(f'SELECT * FROM "{input_username}"')
-                                        encrypt_demo = cursor.fetchall() 
+                                        encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                        encrypt_demo = encryption_key_cursor.fetchall() 
                                         if len(encrypt_demo) == 0:
                                             print("No encryption key found...")
                                         elif len(encrypt_demo) != 0:
-                                            is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                            is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
                                             if is_using_srambler == 1:
                                                 pre_returned_string = database_to_string.database_to_string(encrypt_demo)
                                                 returned_string = letter_remover.LetterFunctions.letter_remover(pre_returned_string)
@@ -282,11 +301,11 @@ def main():
                             elif user_request == "3":
                                 user_request_3 = CLI.Database_settings_menu()
                                 if user_request_3 == "1":
-                                    cursor.execute(f'DELETE FROM "{input_username}"')
-                                    connection.commit()
+                                    encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
+                                    encryption_key_db_connection.commit()
                                     print("DataBase is clear")
-                                    cursor.execute(f'SELECT * FROM "{input_username}"') 
-                                    encrypt_demo = cursor.fetchall()
+                                    encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"') 
+                                    encrypt_demo = encryption_key_cursor.fetchall()
                                     user_panic(input_username)
                                     encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                     Decrypter  = {value: key for key, value in encrypt1.items()}
@@ -295,15 +314,18 @@ def main():
                                 if user_request_2 == "2":
                                     conformation = CLI.Account_confirmation_menu()
                                     if conformation == "1":
-                                        cursor.execute(f'DELETE FROM "{input_username}"')
-                                        connection.commit()
-                                        is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                        encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
+                                        encryption_key_db_connection.commit()
+                                        is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
                                         if is_using_srambler == 1:
                                             user_panic(input_username)
-                                        cursor1.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
-                                        connection1.commit()
-                                        cursor1.execute("SELECT * FROM users ")
-                                        users = database_to_dict.database_to_dict(cursor1.fetchall())
+                                        user_db_cursor.execute(f'DELETE FROM users WHERE username = (?)', (input_username,))
+                                        user_db_connection.commit()
+                                        user_db_cursor.execute("SELECT * FROM users ")
+                                        users = database_to_dict.database_to_dict(user_db_cursor.fetchall())
+                                        encrypt_demo = encryption_key_cursor.fetchall()
+                                        encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
+                                        Decrypter  = {value: key for key, value in encrypt1.items()}
                                         raise AccoutDeletion()                                       
                                 elif user_request_2 == "1":
                                     break
@@ -311,13 +333,13 @@ def main():
                                 CLI.logos()
                                 print("Version " + EnDek_verison)
                                 print("Encryption key status: currently running")
-                                cursor1.execute("SELECT * FROM users ")
-                                users_number = len(cursor1.fetchall())
+                                user_db_cursor.execute("SELECT * FROM users ")
+                                users_number = len(user_db_cursor.fetchall())
                                 if users_number != 1:
                                     print(f"There are {users_number} local users.")
                                 else:
                                     print("There is 1 local user.")
-                                is_using_srambler  = cursor1.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
                                 if is_using_srambler == 1:
                                     print("Scrambler status: Enabled")
                                 elif is_using_srambler == 0:
@@ -327,8 +349,8 @@ def main():
                                 
                         if len(user_covert_input) !=0 :
                             if user_covert_input[-1] == "E" and user_input !="/config":
-                                cursor.execute(f'SELECT * FROM "{input_username}"')
-                                encrypt_demo = cursor.fetchall()
+                                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                encrypt_demo = encryption_key_cursor.fetchall()
                                 encrypt = database_to_dict.database_to_dict(encrypt_demo)
                                 Decrypter  = {value: key for key, value in encrypt1.items()}
                                 for i in user_covert_input:
@@ -345,9 +367,12 @@ def main():
                                             return_sentence = "". join(return_list)
                                             print(return_sentence)
                                     except KeyError:
-                                        print("invalid characters")
+                                        print("invalid character: " + i)
                 except AccoutDeletion:
                     print("account deleted sucessfully...")
+                except KeyboardInterrupt:
+                    print("Thank You for using EnDek")
+                    return
                 except Exception as e:
                     print(f"error occured: {e}")
                     print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
@@ -359,8 +384,8 @@ def main():
                 new_user_password = password_hashing(getpass.getpass("password: "))
                 recheck = getpass.getpass("Re-enter password: ")
                 if password_verification(recheck, new_user_password):
-                    cursor1.execute("INSERT INTO users(username, password, scrambler) VALUES(?, ?, ?)", (input_username, new_user_password, False))
-                    connection1.commit()
+                    user_db_cursor.execute("INSERT INTO users(username, password, scrambler) VALUES(?, ?, ?)", (input_username, new_user_password, False))
+                    user_db_connection.commit()
                     print("user created successfully...")
                 else:
                     print("passwords do not match!!")
