@@ -19,12 +19,6 @@ CLI.logos()
 EnDek_verison = "2.7.0"
 EnDek_name = "Ludicrous"
 
-class InvalidScramblerError(Exception):
-    pass
-class InvalidEncryptionKeyError(Exception):
-    pass
-class EmptyInputError(Exception):
-    pass
 class AccoutDeletion(Exception):
     pass
 def password_hashing(password):
