@@ -16,7 +16,7 @@ import string
 from Functionalities import updater
 CLI.logos()
 
-EnDek_verison = "1.5.9"
+EnDek_verison = "2.7.0"
 EnDek_name = "Ludicrous"
 latest_version = updater.intial_update_checker(EnDek_verison)
 if latest_version is not None:
