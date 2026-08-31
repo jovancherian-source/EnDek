@@ -4,7 +4,7 @@ import urllib.error
 import shutil
 from pathlib import Path
 import os
-import sys
+import zipfile
 import hashlib
 def update_checker(user_version):
     integer_user_version = user_version.split('.')
@@ -181,12 +181,36 @@ def sha_checker():
                 sha_hasher.update(chuck)
             sha_made = sha_hasher.hexdigest()
     except Exception as e:
-        return f"could not generate automonous SHA-256 string for verification duo to {e}"
+        return f"could not generate automonous SHA-256 string for verification due to {e}"
     if sha == sha_made:
         return True
     elif sha != sha_made:
         return False
-print(sha_checker())
+def installer():
+    try:
+        updater_path =  Path(__file__).resolve()
+        Fuctionalities_folder = updater_path.parent
+        EnDek_main = Fuctionalities_folder.parent
+    except PermissionError:
+        print("Insufficient permissions in main folder to install updates")
+        return False
+    except Exception as e:
+        print(f"failed to index file path due to: {e}")
+        return False
+    if os.path.exists(Path.joinpath(EnDek_main.parent, "EnDek_update_file.zip")):
+        if os.path.exists(Path(EnDek_main.parent/ "EnDek_update_file")):
+            os.rmdir(Path(EnDek_main.parent/ "EnDek_update_file"))
+        print("hello")
+        try:
+            with zipfile.ZipFile(EnDek_main.parent/ "EnDek_update_file.zip", "r") as rf:
+                rf.extractall(EnDek_main.parent/ "EnDek_update_file")
+                return True
+        except PermissionError:
+            return("Insufficient permissions in system to install updates")
+        except Exception as e:
+            return f"could not extract the update zip due to: {e}"
+print(installer())
+#print(sha_checker())
 #print(download_update())
 #print(backup())
 #print(after_update_cleanup())
