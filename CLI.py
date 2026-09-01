@@ -28,7 +28,7 @@ def EnDek_config_logo():
 ║ 1. Encryption Settings       ║
 ║ 2. Account Settings          ║
 ║ 3. Database Settings         ║
-║ 4. About EnDek               ║
+║ 4. EnDek Setttings           ║
 ║ 5. Exit                      ║
 ╚══════════════════════════════╝
 
@@ -197,5 +197,25 @@ def new_Scramble_key_for_pre_user():
 """, end="")
     print(reset, end="")
     user_input_1= input(r"> ")
+
+    return user_input_1
+def endek_dual_settings():
+    orange = "\033[38;5;214m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(r"""╔═════════════════════════════════════╗
+║          EnDek Settings             ║
+╠═════════════════════════════════════╣
+║                                     ║
+║ 1 │ About EnDek                     ║
+║ 2 │ Check for Updates               ║
+║ 3 │ ← Back                          ║
+╚═════════════════════════════════════╝
+
+Select an option (1-3):
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
 
     return user_input_1

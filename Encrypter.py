@@ -13,17 +13,14 @@ from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
 from argon2 import PasswordHasher
 import string
+from Functionalities import updater
 CLI.logos()
 
 EnDek_verison = "2.7.0"
 EnDek_name = "Ludicrous"
-
-class InvalidScramblerError(Exception):
-    pass
-class InvalidEncryptionKeyError(Exception):
-    pass
-class EmptyInputError(Exception):
-    pass
+latest_version = updater.intial_update_checker(EnDek_verison)
+if latest_version is not None:
+    print(latest_version)
 class AccoutDeletion(Exception):
     pass
 def password_hashing(password):
@@ -330,21 +327,24 @@ def main():
                                 elif user_request_2 == "1":
                                     break
                             elif user_request == "4":
-                                CLI.logos()
-                                print("Version " + EnDek_verison)
-                                print("Encryption key status: currently running")
-                                user_db_cursor.execute("SELECT * FROM users ")
-                                users_number = len(user_db_cursor.fetchall())
-                                if users_number != 1:
-                                    print(f"There are {users_number} local users.")
-                                else:
-                                    print("There is 1 local user.")
-                                is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
-                                if is_using_srambler == 1:
-                                    print("Scrambler status: Enabled")
-                                elif is_using_srambler == 0:
-                                    print("Scrambler status: Disabled")
-                                    
+                                user_request_dual_endek = CLI.endek_dual_settings()
+                                if user_request_dual_endek == "1":
+                                    CLI.logos()
+                                    print("Version " + EnDek_verison)
+                                    print("Encryption key status: currently running")
+                                    user_db_cursor.execute("SELECT * FROM users ")
+                                    users_number = len(user_db_cursor.fetchall())
+                                    if users_number != 1:
+                                        print(f"There are {users_number} local users.")
+                                    else:
+                                        print("There is 1 local user.")
+                                    is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                    if is_using_srambler == 1:
+                                        print("Scrambler status: Enabled")
+                                    elif is_using_srambler == 0:
+                                        print("Scrambler status: Disabled")
+                                elif user_request_dual_endek == "2":
+                                    print(updater.update_checker(EnDek_verison))
                                     
                                 
                         if len(user_covert_input) !=0 :
@@ -389,7 +389,7 @@ def main():
                     print("user created successfully...")
                 else:
                     print("passwords do not match!!")
-            # beta branch
+
             elif new_user == "n":
                 user_reponse = input("Do you have an encryption key(y/n): ")
                 if user_reponse == "y":
