@@ -36,7 +36,11 @@ def password_verification(password, hashed_password):
 def main():
     while True:
         # user authentication and user database connection
-        input_username = input("username: ")
+        try:
+            input_username = input("username: ")
+        except KeyboardInterrupt:
+            print("Thank You for using EnDek")
+            return
         if input_username == "/exit":
             return
         if not all(char in string.ascii_letters for char in input_username):
@@ -56,19 +60,22 @@ def main():
 
         if input_username in users:
             # password manager, authentication and database connection.
-            input_password_1 = getpass.getpass("sudo: ")
-            if password_verification(input_password_1, users[input_username]):
-                input_password_1 = ""
-                encryption_key_db_connection = sqlite3.connect("encyption_keys.db")
-                encryption_key_cursor = encryption_key_db_connection.cursor()
-                encryption_key_cursor.execute(f"""
-                CREATE TABLE IF NOT EXISTS "{input_username}"(
-                            encryption_key TEXT PRIMARY KEY,
-                            encryption_value TEXT)
-                """)
-                encryption_key_db_connection.commit()
-                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"') 
-                cheker = encryption_key_cursor.fetchall()
+            try:
+                input_password_1 = getpass.getpass("sudo: ")
+                if password_verification(input_password_1, users[input_username]):
+                    input_password_1 = ""
+                    encryption_key_db_connection = sqlite3.connect("encyption_keys.db")
+                    encryption_key_cursor = encryption_key_db_connection.cursor()
+                    encryption_key_cursor.execute(f"""
+                    CREATE TABLE IF NOT EXISTS "{input_username}"(
+                                encryption_key TEXT PRIMARY KEY,
+                                encryption_value TEXT)
+                    """)
+                    encryption_key_db_connection.commit()
+                    encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"') 
+                    cheker = encryption_key_cursor.fetchall()
+                elif password_verification(input_password_1, users[input_username]) == False:
+                    print("wrong password!!")
                 try:
                     trial_times = 0
                     accept_checker = False
@@ -77,7 +84,6 @@ def main():
                         trial_times += 1
                         user_request= input("would you like to enter your Decryption key(y/n): ")
                         if user_request == "y":
-                            accept_checker = True
                             user_encryption_key = input("key: ")
                             # userm log-in encryption key with scrambler key
                             def login_user_scrambler_key(user_encryption_key):
@@ -113,10 +119,16 @@ def main():
                                 user_db_connection.commit()
                                 return encrypt1
                             # cheker pipe line for user enryption key 
-                            if user_encryption_key[-1] == "S":
-                                encrypt1 = login_user_scrambler_key(user_encryption_key)
-                            elif user_encryption_key[-1] != "S":    
-                                encrypt1 = login_user_encyption_key(user_encryption_key)
+                            if user_encryption_key == "":
+                                print("Encryption key cannot be empty...")
+                                accept_checker = False
+                            elif user_encryption_key != "":
+                                if user_encryption_key[-1] == "S":
+                                    accept_checker = True
+                                    encrypt1 = login_user_scrambler_key(user_encryption_key)
+                                elif user_encryption_key[-1] != "S":   
+                                    accept_checker = True 
+                                    encrypt1 = login_user_encyption_key(user_encryption_key)
                         # auto generating encryption key for first time log-in
                         def login_random_key_generation():
                             user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
@@ -144,9 +156,9 @@ def main():
                                 encrypt1 = loger_checker[0]
                                 accept_checker = True
                             elif loger_checker[1] == False:
-                                accept_checker = loger_checker[1]
+                                accept_checker = False
                     if trial_times > 4:
-                        print("you have no enrcyption key!!")
+                        print("you have no enrcyption key!! add one via config menu...")
                     # user encryption key fething form the database 
                     else:
                         encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
@@ -299,13 +311,18 @@ def main():
                                 user_request_3 = CLI.Database_settings_menu()
                                 if user_request_3 == "1":
                                     encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
+                                    encryption_key_cursor.execute(f'DROP TABLE "{input_username}"')
                                     encryption_key_db_connection.commit()
+                                    encryption_key_db_connection.close()
                                     print("DataBase is clear")
                                     encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"') 
                                     encrypt_demo = encryption_key_cursor.fetchall()
                                     user_panic(input_username)
                                     encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
                                     Decrypter  = {value: key for key, value in encrypt1.items()}
+                                    if __name__ == "__main__":
+                                        main()
+                                    return
                             elif user_request == "2":
                                 user_request_2 = CLI.Account_settings_menu()
                                 if user_request_2 == "2":
@@ -368,6 +385,9 @@ def main():
                                             print(return_sentence)
                                     except KeyError:
                                         print("invalid character: " + i)
+                    user_db_connection.close()
+                    encryption_key_db_connection.close()
+                       
                 except AccoutDeletion:
                     print("account deleted sucessfully...")
                 except KeyboardInterrupt:
@@ -376,8 +396,11 @@ def main():
                 except Exception as e:
                     print(f"error occured: {e}")
                     print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
-            elif input_password_1 != users.get(input_username):
-                print("wrong password!!")
+            except KeyboardInterrupt:
+                print("Thank You for using EnDek")
+                return
+            except Exception as e:
+                print(f"An error occurred while fetching encryption keys: {e}")
         elif input_username not in users:
             new_user = input("user not found. would you like to create a new user(y/n): ")
             if new_user == "y":
