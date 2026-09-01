@@ -80,7 +80,7 @@ def main():
                             accept_checker = True
                             user_encryption_key = input("key: ")
                             # userm log-in encryption key with scrambler key
-                            def login_user_scrambler_key():
+                            def login_user_scrambler_key(user_encryption_key):
                                 user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
                                 user_db_connection.commit()
                                 unscrambler_key = input("Scrambler Key: ")
@@ -97,7 +97,7 @@ def main():
                                 encryption_key_db_connection.commit()
                                 return encrypt1
                             # user log-in encryption key without scrambler key
-                            def login_user_encyption_key():
+                            def login_user_encyption_key(user_encryption_key):
                                 user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))
                                 user_db_connection.commit()
                                 user_encryption_key = letter_remover.LetterFunctions.letter_adder(user_encryption_key)
@@ -114,9 +114,9 @@ def main():
                                 return encrypt1
                             # cheker pipe line for user enryption key 
                             if user_encryption_key[-1] == "S":
-                                encrypt1 = login_user_scrambler_key()
+                                encrypt1 = login_user_scrambler_key(user_encryption_key)
                             elif user_encryption_key[-1] != "S":    
-                                encrypt1 = login_user_encyption_key()
+                                encrypt1 = login_user_encyption_key(user_encryption_key)
                         # auto generating encryption key for first time log-in
                         def login_random_key_generation():
                             user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (False, input_username))

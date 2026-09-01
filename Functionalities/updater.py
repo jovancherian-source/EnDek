@@ -6,6 +6,10 @@ from pathlib import Path
 import os
 import zipfile
 import hashlib
+
+
+# THIS FILE IS BETA. USE WITH CAUTION.
+
 def update_checker(user_version):
     integer_user_version = user_version.split('.')
     GitHub_API = "https://api.github.com/repos/jovancherian-source/EnDek/releases/latest"
@@ -148,6 +152,8 @@ def after_update_cleanup():
         shutil_zip_path = Path(os.path.join(EnDek_main.parent, "EnDek_update_file.zip"))
         shutil_backup_path = Path(os.path.join(EnDek_main.parent,".EnDek_backup_for_update"))
         shutil_zip_path.unlink(missing_ok=True)
+        if Path(EnDek_main.parent/ "EnDek_update_file").exists():
+            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_update_file"))
         if shutil_backup_path.exists():
             shutil.rmtree(shutil_backup_path)
         return "cleaned up"
@@ -200,7 +206,6 @@ def installer():
     if os.path.exists(Path.joinpath(EnDek_main.parent, "EnDek_update_file.zip")):
         if os.path.exists(Path(EnDek_main.parent/ "EnDek_update_file")):
             os.rmdir(Path(EnDek_main.parent/ "EnDek_update_file"))
-        print("hello")
         try:
             with zipfile.ZipFile(EnDek_main.parent/ "EnDek_update_file.zip", "r") as rf:
                 rf.extractall(EnDek_main.parent/ "EnDek_update_file")
@@ -209,12 +214,13 @@ def installer():
             return("Insufficient permissions in system to install updates")
         except Exception as e:
             return f"could not extract the update zip due to: {e}"
-print(installer())
+    elif not os.path.exists(Path.joinpath(EnDek_main.parent, "EnDek_update_file.zip")):
+        return("Update zip file not found. Please download the update first.")
+#print(installer())
 #print(sha_checker())
 #print(download_update())
 #print(backup())
-#print(after_update_cleanup())
-#print(download_update())
+print(after_update_cleanup())
 # check for update----
 # backup data----
 #confirm backup---
