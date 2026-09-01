@@ -76,9 +76,13 @@ You can download the repository directly as a ZIP file.
 
 ```bash
 cd <installation location>
+
 curl -L https://github.com/jovancherian-source/EnDek/archive/refs/heads/main.zip -o EnDek.zip
+
 unzip EnDek.zip
+
 cd EnDek-main
+
 python3 Encrypter.py
 ```
 
@@ -86,6 +90,7 @@ If your system uses `python` for Python 3:
 
 ```bash
 cd EnDek-main
+
 python Encrypter.py
 ```
 
@@ -93,9 +98,13 @@ python Encrypter.py
 
 ```powershell
 cd <installation location>
+
+
 Invoke-WebRequest "https://github.com/jovancherian-source/EnDek/archive/refs/heads/main.zip" -OutFile "EnDek.zip"
 Expand-Archive "EnDek.zip" -DestinationPath "."
+
 cd EnDek-main
+
 python Encrypter.py
 ```
 
