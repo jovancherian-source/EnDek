@@ -99,7 +99,6 @@ python Encrypter.py
 ```powershell
 cd <installation location>
 
-
 Invoke-WebRequest "https://github.com/jovancherian-source/EnDek/archive/refs/heads/main.zip" -OutFile "EnDek.zip"
 Expand-Archive "EnDek.zip" -DestinationPath "."
 
