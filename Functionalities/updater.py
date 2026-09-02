@@ -220,7 +220,7 @@ def installer():
 #print(sha_checker())
 #print(download_update())
 #print(backup())
-print(after_update_cleanup())
+#print(after_update_cleanup())
 # check for update----
 # backup data----
 #confirm backup---
