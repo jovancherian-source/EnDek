@@ -38,6 +38,11 @@ def scrambler(Encryption_key, username):
         connection.close()
         return ["".join(return_encryption_key) , index_numbers]
 def new_encryption_key_unscrambler(scrambeled_encryption_key, unscrambler , username):
+    special_encryption_key = list(scrambeled_encryption_key.strip('S'))
+    scrambler_encryptio_key_usable = []
+    for item in special_encryption_key:
+        if item != ' ':
+            scrambler_encryptio_key_usable.append(item)
     connection = sqlite3.connect("scrambler.db")
     cursor = connection.cursor()
     cursor.execute(f"""
@@ -52,7 +57,6 @@ def new_encryption_key_unscrambler(scrambeled_encryption_key, unscrambler , user
         if item != ' ' and item != "[" and item != "]" and item != ' ':
             index_numbers_usable.append(item)
     index_numbers = "".join(index_numbers_usable).split(",")
-    print(index_numbers)
     for index in range(len(index_numbers)):
         cursor.execute(f"INSERT INTO '{username}'(position, index_number) VALUES(?, ?)", (index, index_numbers[index]))
     connection.commit()
@@ -62,7 +66,7 @@ def new_encryption_key_unscrambler(scrambeled_encryption_key, unscrambler , user
     return_encryption_key = []
     sorted_index_numbers = sorted(usable_index_numbers, key=lambda x: x[1])
     for item in sorted_index_numbers:
-         return_encryption_key.append(scrambeled_encryption_key[item[0]])
+         return_encryption_key.append(scrambler_encryptio_key_usable[item[0]])
     connection.commit()
     connection.close()
     return "".join(return_encryption_key)
