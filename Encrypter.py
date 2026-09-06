@@ -13,7 +13,8 @@ from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
 from argon2 import PasswordHasher
 import string
-from Functionalities import updater
+import sys
+from Functionalities import updater, cache_clearer
 CLI.logos()
 
 EnDek_verison = "2.7.0"
@@ -360,7 +361,15 @@ def main():
                                             print("Scrambler status: Disabled")
                                     elif user_request_dual_endek == "2":
                                         print(updater.update_checker(EnDek_verison))
-                                        
+                                    elif user_request_dual_endek == "3":
+                                        conformation = input("""Are you sure you want to clear the cache this can result in slower speed for 
+sometime, but can increase speed over time don't use this freature frequently(y/n): """)
+                                        if conformation.lower() == "y":
+                                            trail = cache_clearer.cache_clearer()
+                                            if trail == True:
+                                                print("Cache cleared successfully...")
+                                            elif trail == False:
+                                                print("Cache clearing failed...")
                                     
                             if len(user_covert_input) !=0 :
                                 if user_covert_input[-1] == "E" and user_input !="/config":
@@ -389,7 +398,7 @@ def main():
                         print("account deleted sucessfully...")
                     except KeyboardInterrupt:
                         print("Thank You for using EnDek")
-                        return
+                        sys.exit()
                     except Exception as e:
                         print(f"error occured: {e}")
                         print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
@@ -397,6 +406,7 @@ def main():
                     print("wrong password!!")
             except KeyboardInterrupt:
                 print("Thank You for using EnDek")
+                sys.exit()
                 return
             except Exception as e:
                 print(f"An error occurred while fetching encryption keys: {e}")
