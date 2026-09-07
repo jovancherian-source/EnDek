@@ -210,10 +210,11 @@ def endek_dual_settings():
 ║                                     ║
 ║ 1 │ About EnDek                     ║
 ║ 2 │ Check for Updates               ║
-║ 3 │ ← Back                          ║
+║ 3 │ Clear Cache                     ║
+║ 4 │ ← Back                          ║
 ╚═════════════════════════════════════╝
 
-Select an option (1-3):
+Select an option (1-4):
 """, end="")
     print(reset, end="")
     user_input_1= input(r"Enter selection: _")

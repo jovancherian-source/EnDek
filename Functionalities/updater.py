@@ -6,6 +6,9 @@ from pathlib import Path
 import os
 import zipfile
 import hashlib
+import subprocess
+import sys
+
 
 
 # THIS FILE IS BETA. USE WITH CAUTION.
@@ -52,7 +55,7 @@ def back_up_verifier(EnDek_path, EnDek_backup_path):
     toal_size = 0
     toal_files_1 = 0
     toal_size_1 = 0
-    ignored_file = (".git", ".cache", "__pycache__", ".pyc")
+    ignored_file = (".git", ".cache", "__pycache__", ".pyc" ,".venv")
     for root, dirs, files in os.walk(EnDek_path):
         dirs[:] = [d for d in dirs if d not in ignored_file]
         for file in files:
@@ -60,6 +63,7 @@ def back_up_verifier(EnDek_path, EnDek_backup_path):
                 file_path = os.path.join(root, file)
                 file_size = os.path.getsize(file_path)
                 toal_files+= 1
+                print(f"Processing file: {file_path}")
                 toal_size+= file_size
     for root, dirs, files in os.walk(EnDek_backup_path):
         dirs[:] = [d for d in dirs if d not in ignored_file]
@@ -68,6 +72,7 @@ def back_up_verifier(EnDek_path, EnDek_backup_path):
                 file_path = os.path.join(root, file)
                 file_size = os.path.getsize(file_path)
                 toal_files_1+= 1
+                print(f"Processing file: {file_path}")
                 toal_size_1+= file_size
     if toal_files_1 == toal_files and toal_size == toal_size_1:
         return True, toal_files
@@ -120,9 +125,8 @@ def download_update():
         return False
     try:
         output_file = EnDek_main.parent/ "EnDek_update_file.zip"
-        shutil_path = EnDek_main.parent/ "EnDek_update_file"
-        if Path.exists(shutil_path):
-            shutil.rmtree(shutil_path)
+        if Path.exists(output_file):
+            shutil.rmtree(output_file)
         GitHub_release_API = "https://api.github.com/repos/jovancherian-source/EnDek/releases/latest"
         release_data = urllib.request.Request(GitHub_release_API, headers={"User-Agent": "EnDek"})
         with urllib.request.urlopen(release_data, timeout=5) as json_data:
@@ -152,8 +156,8 @@ def after_update_cleanup():
         shutil_zip_path = Path(os.path.join(EnDek_main.parent, "EnDek_update_file.zip"))
         shutil_backup_path = Path(os.path.join(EnDek_main.parent,".EnDek_backup_for_update"))
         shutil_zip_path.unlink(missing_ok=True)
-        if Path(EnDek_main.parent/ "EnDek_update_file").exists():
-            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_update_file"))
+        if Path(EnDek_main.parent/ "EnDek_old").exists():
+            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_old"))
         if shutil_backup_path.exists():
             shutil.rmtree(shutil_backup_path)
         return "cleaned up"
@@ -192,7 +196,7 @@ def sha_checker():
         return True
     elif sha != sha_made:
         return False
-def installer():
+def extracter():
     try:
         updater_path =  Path(__file__).resolve()
         Fuctionalities_folder = updater_path.parent
@@ -203,12 +207,24 @@ def installer():
     except Exception as e:
         print(f"failed to index file path due to: {e}")
         return False
-    if os.path.exists(Path.joinpath(EnDek_main.parent, "EnDek_update_file.zip")):
-        if os.path.exists(Path(EnDek_main.parent/ "EnDek_update_file")):
-            os.rmdir(Path(EnDek_main.parent/ "EnDek_update_file"))
+    try:
+        output_file = Path(EnDek_main.parent/ "EnDek_update_file.zip")
+        GitHub_release_API = "https://api.github.com/repos/jovancherian-source/EnDek/releases/latest"
+        release_data = urllib.request.Request(GitHub_release_API, headers={"User-Agent": "EnDek"})
+        with urllib.request.urlopen(release_data, timeout=5) as json_data:
+            data = json.loads(json_data.read().decode())
+        latest_verison = data["tag_name"]
+    except urllib.error.URLError:
+        return("No internet connection. Unable to Check for Updates...")
+    except Exception as e:
+        return f"could not download update due to: {e}"
+    print(os.path.exists(EnDek_main.parent / "EnDek_update_file.zip"))
+    if os.path.exists(EnDek_main.parent / "EnDek_update_file.zip"):
+        if os.path.exists(Path(EnDek_main.parent/ f"EnDek-{latest_verison}")):
+            os.rmdir(Path(EnDek_main.parent/ f"EnDek-{latest_verison}"))
         try:
             with zipfile.ZipFile(EnDek_main.parent/ "EnDek_update_file.zip", "r") as rf:
-                rf.extractall(EnDek_main.parent/ "EnDek_update_file")
+                rf.extractall(EnDek_main.parent)
                 return True
         except PermissionError:
             return("Insufficient permissions in system to install updates")
@@ -216,15 +232,43 @@ def installer():
             return f"could not extract the update zip due to: {e}"
     elif not os.path.exists(Path.joinpath(EnDek_main.parent, "EnDek_update_file.zip")):
         return("Update zip file not found. Please download the update first.")
+def installer():
+    GitHub_API = "https://api.github.com/repos/jovancherian-source/EnDek/releases/latest"
+    try:
+        request = urllib.request.Request(GitHub_API, headers={"User-Agent": "EnDek"})
+        with urllib.request.urlopen(request, timeout=5) as whole_data_json:
+            whole_data = json.loads(whole_data_json.read().decode())
+        latest_verison = whole_data['tag_name'].strip('v')
+    except Exception as e:
+        print(f"could not install update due to{e}")
+    try:
+        updater_path =  Path(__file__).resolve()
+        Fuctionalities_folder = updater_path.parent
+        EnDek_main = Fuctionalities_folder.parent
+    except PermissionError:
+        print("Insufficient permissions in main folder to install updates")
+        return False
+    except Exception as e:
+        print(f"failed to index file path due to: {e}")
+        return False
+
+
+
 #print(installer())
+#print(update_checker("1.0.0"))
+print(extracter())
 #print(sha_checker())
 #print(download_update())
 #print(backup())
 #print(after_update_cleanup())
-# check for update----
+#print(back_up_verifier(Path("C:/Users/jovan/Documents/EnDek"), Path("C:/Users/jovan/Documents/EnDek_backup_for_update")))
+
+#----------------------------------------|
+
+#check for update----
 # backup data----
 #confirm backup---
-# download the update
-# verfeify the update
+# download the update----
+# verfeify the update----
 # install the update(change the files)
 # restart main
