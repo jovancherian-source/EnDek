@@ -38,7 +38,7 @@ Before installing EnDek, make sure **Python 3** is installed.
 Open PowerShell or Command Prompt:
 
 ```powershell
-cd <installation location>
+cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
 python Encrypter.py
@@ -49,7 +49,7 @@ python Encrypter.py
 Open Terminal:
 
 ```bash
-cd <installation location>
+cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
 python3 Encrypter.py
@@ -60,7 +60,7 @@ python3 Encrypter.py
 Open your terminal:
 
 ```bash
-cd <installation location>
+cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
 python3 Encrypter.py
@@ -75,10 +75,14 @@ You can download the repository directly as a ZIP file.
 ### macOS / Linux
 
 ```bash
-cd <installation location>
+cd "installation location"
+
 curl -L https://github.com/jovancherian-source/EnDek/archive/refs/heads/main.zip -o EnDek.zip
+
 unzip EnDek.zip
+
 cd EnDek-main
+
 python3 Encrypter.py
 ```
 
@@ -86,16 +90,20 @@ If your system uses `python` for Python 3:
 
 ```bash
 cd EnDek-main
+
 python Encrypter.py
 ```
 
 ### Windows PowerShell
 
 ```powershell
-cd <installation location>
+cd "installation location"
+
 Invoke-WebRequest "https://github.com/jovancherian-source/EnDek/archive/refs/heads/main.zip" -OutFile "EnDek.zip"
 Expand-Archive "EnDek.zip" -DestinationPath "."
+
 cd EnDek-main
+
 python Encrypter.py
 ```
 
