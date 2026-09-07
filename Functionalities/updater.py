@@ -256,7 +256,7 @@ def installer():
 
 #print(installer())
 #print(update_checker("1.0.0"))
-print(extracter())
+#print(extracter())
 #print(sha_checker())
 #print(download_update())
 #print(backup())
