@@ -15,7 +15,7 @@ from argon2 import PasswordHasher
 import string
 import sys
 from Functionalities import updater, cache_clearer
-CLI.logos()
+
 
 EnDek_verison = "2.7.1"
 EnDek_name = "Ludicrous"
@@ -188,23 +188,27 @@ def main():
                                             if user_encryption_key[-1] == "S":
                                                 user_db_cursor.execute("UPDATE users SET scrambler = ? WHERE username = ? " , (True, input_username))
                                                 unscrambler_key = input("Scrambler Key: ")
-                                                user_encryption_key_unscrambled = new_encryption_key_unscrambler(scrambeled_encryption_key = pre_user_encryption_key, unscrambler = unscrambler_key , username = input_username)
-                                                user_encryption_key_unscrambled = letter_remover.LetterFunctions.letter_adder(user_encryption_key_unscrambled)
-                                                encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
-                                                updated_encryption_key = twod_list_maker.list_maker(user_encryption_key_unscrambled)
-                                                for key in updated_encryption_key:
-                                                    encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
-                                                print("Encryption key updated sucessfully...")
-                                                encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
-                                                encrypt_demo = encryption_key_cursor.fetchall()
-                                                encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
-                                                Decrypter  = {value: key for key, value in encrypt1.items()}
-                                                encryption_key_db_connection.commit()
-                                                user_db_connection.commit()
+                                                if len(unscrambler_key) != 0:
+                                                    user_encryption_key_unscrambled = new_encryption_key_unscrambler(scrambeled_encryption_key = pre_user_encryption_key, unscrambler = unscrambler_key , username = input_username)
+                                                    user_encryption_key_unscrambled = letter_remover.LetterFunctions.letter_adder(user_encryption_key_unscrambled)
+                                                    encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
+                                                    updated_encryption_key = twod_list_maker.list_maker(user_encryption_key_unscrambled)
+                                                    for key in updated_encryption_key:
+                                                        encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
+                                                    print("Encryption key updated sucessfully...")
+                                                    encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
+                                                    encrypt_demo = encryption_key_cursor.fetchall()
+                                                    encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
+                                                    Decrypter  = {value: key for key, value in encrypt1.items()}
+                                                    encryption_key_db_connection.commit()
+                                                    user_db_connection.commit()
+                                                else:
+                                                    print("scrambler key cannot be empty.")
                                             #without scrambler 
                                             elif user_encryption_key[-1] != "S":
                                                 encryption_key_cursor.execute(f'DELETE FROM "{input_username}"')
-                                                updated_encryption_key = twod_list_maker.list_maker(user_encryption_key)
+                                                user_encryption_key_added = letter_remover.LetterFunctions.letter_adder(user_encryption_key)
+                                                updated_encryption_key = twod_list_maker.list_maker(user_encryption_key_added)
                                                 for key in updated_encryption_key:
                                                     encryption_key_cursor.execute(f'INSERT INTO "{input_username}"( encryption_key , encryption_value) VALUES(?,?)', (key[0] , key[1]))
                                                 print("Encryption key updated sucessfully...")
@@ -229,8 +233,8 @@ def main():
                                                     encryption_key_cursor.execute(f'INSERT INTO "{input_username}"(encryption_key, encryption_value) VALUES(?,?)', (key_letter[0], key_letter[1]))
                                                 random_generated_string_full = letter_remover.LetterFunctions.letter_remover(random_generated_string)
                                                 scrambled_encyption_key_output = pre_scrambler(random_generated_string_full, input_username)
-                                                print(scrambled_encyption_key_output[0])
-                                                print(scrambled_encyption_key_output[1])
+                                                print(f"Encryption key: {scrambled_encyption_key_output[0]}")
+                                                print(f"Scrambler key: {scrambled_encyption_key_output[1]}")
                                                 encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
                                                 encrypt_demo = encryption_key_cursor.fetchall()
                                                 encrypt1 = database_to_dict.database_to_dict(encrypt_demo)
@@ -347,23 +351,28 @@ def main():
                                     if user_request_dual_endek == "1":
                                         CLI.logos()
                                         print("Version " + EnDek_verison)
+                                        print("---------------------------------")
+                                        print(f"Signed in as: {input_username}")
+                                        print("---------------------------------")
                                         print("Encryption key status: currently running")
+                                        is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
+                                        if is_using_srambler == 1:
+                                            print("Scrambler status: Enabled")
+                                            print("---------------------------------")
+                                        elif is_using_srambler == 0:
+                                            print("Scrambler status: Disabled")
+                                            print("---------------------------------")
                                         user_db_cursor.execute("SELECT * FROM users ")
                                         users_number = len(user_db_cursor.fetchall())
                                         if users_number != 1:
                                             print(f"There are {users_number} local users.")
                                         else:
                                             print("There is 1 local user.")
-                                        is_using_srambler  = user_db_cursor.execute(f'SELECT scrambler FROM users WHERE username = ?' , (input_username,)).fetchone()[0]
-                                        if is_using_srambler == 1:
-                                            print("Scrambler status: Enabled")
-                                        elif is_using_srambler == 0:
-                                            print("Scrambler status: Disabled")
                                     elif user_request_dual_endek == "2":
                                         print(updater.update_checker(EnDek_verison))
                                     elif user_request_dual_endek == "3":
                                         conformation = input("""Are you sure you want to clear the cache this can result in slower speed for 
-sometime, but can increase speed over time don't use this freature frequently(y/n): """)
+sometime, but can increase speed over time don't use this freature frequently.(y/n): """)
                                         if conformation.lower() == "y":
                                             trail = cache_clearer.cache_clearer()
                                             if trail == True:
@@ -380,18 +389,19 @@ sometime, but can increase speed over time don't use this freature frequently(y/
                                     for i in user_covert_input:
                                         if i in Decrypter:
                                             return_list.append(Decrypter.get(i , "letter not found :("))
-                                    return_word = "". join(return_list)
+                                    return_word = "".join(return_list)
                                     print(return_word)
                                 if user_covert_input[-1] != "E" and user_input !="/config":
+                                    invalid_character_list = []
                                     for i in user_covert_input :
                                         try:
                                             return_list.append(encrypt1[i.lower()])               
-                                            if len(user_covert_input) == len(return_list):
-                                                return_list.append("E")
-                                                return_sentence = "". join(return_list)
-                                                print(return_sentence)
                                         except KeyError:
-                                            print("invalid character: " + i)
+                                            invalid_character_list.append(i)
+                                    return_list.append("E")
+                                    print("".join(return_list))
+                                    if len(invalid_character_list) != 0:
+                                        print("skipped invalid characters: "+ " ".join(invalid_character_list))
                         user_db_connection.close()
                         encryption_key_db_connection.close()   
                     except AccoutDeletion:
@@ -399,17 +409,13 @@ sometime, but can increase speed over time don't use this freature frequently(y/
                     except KeyboardInterrupt:
                         print("Thank You for using EnDek")
                         sys.exit()
-                    except Exception as e:
-                        print(f"error occured: {e}")
-                        print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
+
                 elif password_verification(input_password_1, users[input_username]) == False:
                     print("wrong password!!")
             except KeyboardInterrupt:
                 print("Thank You for using EnDek")
                 sys.exit()
                 return
-            except Exception as e:
-                print(f"An error occurred while fetching encryption keys: {e}")
         elif input_username not in users:
             new_user = input("user not found. would you like to create a new user(y/n): ")
             if new_user == "y":

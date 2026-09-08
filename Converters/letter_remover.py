@@ -12,10 +12,11 @@ class LetterFunctions():
             return False
     def letter_adder(input_string):
         try:
-            input_list = list(input_string)
-            for item in input_list:
-                if item == " ":
-                    input_list.remove(item)
+            input_list_from_user = list(input_string)
+            input_list = []
+            for item in input_list_from_user:
+                if item != " ":
+                    input_list.append(item)
             final_list = []
             letters = ['a','b', 'c', 'd', 'e' ,'f', 'g' ,'h','i', 'j', 'k', 'l' , 'm' , 'n', 'o', 'p', 'q' , 'r', 's' ,'t', 'u' ," ", 'v', 'w', 'x', 'y', 'z', '.' ]
             for i in range(0 ,len(input_list)):
