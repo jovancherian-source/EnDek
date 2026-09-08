@@ -17,7 +17,7 @@ import sys
 from Functionalities import updater, cache_clearer
 CLI.logos()
 
-EnDek_verison = "2.7.0"
+EnDek_verison = "2.7.1"
 EnDek_name = "Ludicrous"
 latest_version = updater.intial_update_checker(EnDek_verison)
 if latest_version is not None:
