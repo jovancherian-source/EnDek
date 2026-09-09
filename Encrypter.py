@@ -15,7 +15,7 @@ from argon2 import PasswordHasher
 import string
 import sys
 from Functionalities import updater, cache_clearer
-
+CLI.logos()
 
 EnDek_verison = "2.7.1"
 EnDek_name = "Ludicrous"
