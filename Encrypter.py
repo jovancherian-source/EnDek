@@ -409,6 +409,9 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                     except KeyboardInterrupt:
                         print("Thank You for using EnDek")
                         sys.exit()
+                    except Exception as e:
+                        print(f"error occured: {e}")
+                        print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
 
                 elif password_verification(input_password_1, users[input_username]) == False:
                     print("wrong password!!")
@@ -416,6 +419,8 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                 print("Thank You for using EnDek")
                 sys.exit()
                 return
+            except Exception as e:
+                print(f"An error occurred while fetching encryption keys: {e}")
         elif input_username not in users:
             new_user = input("user not found. would you like to create a new user(y/n): ")
             if new_user == "y":

@@ -19,6 +19,7 @@ class LetterFunctions():
                     input_list.append(item)
             final_list = []
             letters = ['a','b', 'c', 'd', 'e' ,'f', 'g' ,'h','i', 'j', 'k', 'l' , 'm' , 'n', 'o', 'p', 'q' , 'r', 's' ,'t', 'u' ," ", 'v', 'w', 'x', 'y', 'z', '.' ]
+            print(len(letters))
             for i in range(0 ,len(input_list)):
                 if i < len(input_list):
                     final_list.append(letters[i])
