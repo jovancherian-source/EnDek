@@ -54,7 +54,7 @@ def new_encryption_key_unscrambler(scrambeled_encryption_key, unscrambler , user
     index_numbers_unpure = list(unscrambler)
     index_numbers_usable =[]
     for item in index_numbers_unpure:
-        if item != ' ' and item != "[" and item != "]" and item != ' ':
+        if item != ' ' and item != "[" and item != "]":
             index_numbers_usable.append(item)
     index_numbers = "".join(index_numbers_usable).split(",")
     for index in range(len(index_numbers)):
@@ -88,11 +88,17 @@ def unscrambler(scrambled_encryption_key, username):
     connection.commit()
     connection.close()
     return "".join(return_encryption_key)
+print
 def scrambeler_updater(scrambler_key, username):
+    index_numbers_pre = []
+    list_scrambler = list(scrambler_key)
+    for item in list_scrambler:
+         if item != " " and item != "[" and item != "]":
+              index_numbers_pre.append(item)
+    index_numbers = "".join(index_numbers_pre).split(",")
     connection = sqlite3.connect("scrambler.db")
     cursor = connection.cursor()
     cursor.execute(f"DELETE FROM '{username}'")
-    index_numbers = scrambler_key.strip('[]').split(', ')
     for index in range(len(index_numbers)):
         cursor.execute(f"INSERT INTO '{username}'(position, index_number) VALUES(?, ?)", (index, index_numbers[index]))
     connection.commit()
