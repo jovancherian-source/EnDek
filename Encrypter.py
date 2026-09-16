@@ -433,6 +433,7 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                 else:
                     print("passwords do not match!!")
 
+            # unknown user encryption
             elif new_user == "n":
                 user_reponse = input("Do you have an encryption key(y/n): ")
                 if user_reponse == "y":
