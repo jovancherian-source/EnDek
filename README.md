@@ -1,5 +1,5 @@
 <p align="center">
-<img width="451.5" height="219" alt="EnDek_logo" src="https://github.com/user-attachments/assets/23239267-cb61-4694-a8c8-b604b2445a49" />
+<img width="451.5" height="219" alt="EnDek_logo" src="/Functionalities/Assets/EnDek_logo.png" />
 </p>
 
 ## What is EnDek?
