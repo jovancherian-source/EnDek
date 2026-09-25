@@ -14,4 +14,9 @@ def cache_clearer():
     except Exception as e:
         print(f"An error occurred while clearing cache: {e}")
         return False
+<<<<<<< HEAD
 # private beta test code for only private beta
+=======
+    return True
+# private beta test code 2
+>>>>>>> main
