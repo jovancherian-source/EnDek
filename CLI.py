@@ -1,5 +1,33 @@
+import time
+
+_ENDEK_BLOCK_LOGO = [
+    "                                            ",
+    "  ███████╗███╗   ██╗██████╗ ███████╗██╗  ██╗",
+    "  ██╔════╝████╗  ██║██╔══██╗██╔════╝██║ ██╔╝",
+    "  █████╗  ██╔██╗ ██║██║  ██║█████╗  █████╔╝ ",
+    "  ██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██╔═██╗ ",
+    "  ███████╗██║ ╚████║██████╔╝███████╗██║  ██╗",
+    "  ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═╝",
+]
+
+_GRADIENT_STEPS = [
+    "\033[0m",
+    "\033[38;2;238;175;110m",
+    "\033[38;2;225;145;98m", 
+    "\033[38;2;215;130;94m", 
+    "\033[38;2;204;120;92m",  
+    "\033[38;2;185;102;76m", 
+    "\033[38;2;169;88;62m",
+]
 def logos():
-    orange = "\033[38;5;214m"
+    for i in range(len(_ENDEK_BLOCK_LOGO)):
+        print(_GRADIENT_STEPS[i],_ENDEK_BLOCK_LOGO[i])
+        time.sleep(0.025)
+    reset = "\033[0m"
+    print(reset)
+
+def original_logos():
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -18,7 +46,7 @@ def logos():
     print(reset)
 
 def EnDek_config_logo():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -37,7 +65,7 @@ Choice:""", end="")
     return ""
 
 def EnDek_encyption_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -58,7 +86,7 @@ Enter selection: _""", end="")
     return user_input_1
 
 def Database_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -78,7 +106,7 @@ def Database_settings_menu():
 
     return user_input_1
 def Account_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -103,7 +131,7 @@ Select an option (1-3):
 
     return user_input_1
 def Account_confirmation_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -126,7 +154,7 @@ Select an option:
 
     return user_input_1
 def first_Scramble_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -145,7 +173,7 @@ Select an option (1-2):
 
     return user_input_1
 def Scramble_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -167,7 +195,7 @@ Select an option (1-3):
     return user_input_1
 
 def new_Scramble_settings_menu():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -186,7 +214,7 @@ Select an option:
 
     return user_input_1
 def new_Scramble_key_for_pre_user():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
@@ -200,7 +228,7 @@ def new_Scramble_key_for_pre_user():
 
     return user_input_1
 def endek_dual_settings():
-    orange = "\033[38;5;214m"
+    orange = "\033[38;2;204;120;92m"
     reset = "\033[0m"
 
     print(orange)
