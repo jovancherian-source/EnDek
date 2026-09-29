@@ -1,4 +1,5 @@
 import time
+import json
 
 _ENDEK_BLOCK_LOGO = [
     "                                            ",
@@ -27,7 +28,7 @@ def logos():
     print(reset)
 
 def original_logos():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;5;214m"
     reset = "\033[0m"
 
     print(orange)

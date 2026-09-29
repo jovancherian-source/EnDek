@@ -174,6 +174,9 @@ def main():
                             if user_input == "/logout":
                                 break        
                             # config menu setting
+                            if user_input == "/key":
+                                print("""thank you for keeping youself update about EnDek.
+mutiple key feature will come soon...""")
                             if user_input.lower() == "/config":
                                 user_request= input(CLI.EnDek_config_logo())
                                 # Encryption Settings menu
@@ -381,7 +384,7 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                                                 print("Cache clearing failed...")
                                     
                             if len(user_covert_input) !=0 :
-                                if user_covert_input[-1] == "E" and user_input !="/config":
+                                if user_covert_input[-1] == "E" and user_input[0] !="/":
                                     encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
                                     encrypt_demo = encryption_key_cursor.fetchall()
                                     encrypt = database_to_dict.database_to_dict(encrypt_demo)
@@ -391,7 +394,7 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                                             return_list.append(Decrypter.get(i , "letter not found :("))
                                     return_word = "".join(return_list)
                                     print(return_word)
-                                if user_covert_input[-1] != "E" and user_input !="/config":
+                                if user_covert_input[-1] != "E" and user_input[0] !="/":
                                     invalid_character_list = []
                                     for i in user_covert_input :
                                         try:
