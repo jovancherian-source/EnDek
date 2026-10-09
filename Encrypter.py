@@ -11,10 +11,15 @@ from Scrambler import new_encryption_key_unscrambler
 from Scrambler import user_panic
 from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
-from argon2 import PasswordHasher
 import string
 import sys
 from Functionalities import updater, cache_clearer
+try:
+    from argon2 import PasswordHasher
+except ImportError:
+    print("required Dependencies are not installed to run EnDek.")
+    print('please install it using the command: "pip install -r requirments.txt"')
+    exit(1)
 CLI.logos()
 
 EnDek_verison = "2.7.1"
