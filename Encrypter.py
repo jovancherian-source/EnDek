@@ -20,7 +20,7 @@ except ImportError:
     print("required Dependencies are not installed to run EnDek.")
     print('please install it using the command: "pip install -r requirments.txt"')
     exit(1)
-CLI.logos()
+CLI.logo()
 
 EnDek_verison = "2.7.1"
 EnDek_name = "Ludicrous"
@@ -387,7 +387,18 @@ sometime, but can increase speed over time don't use this freature frequently.(y
                                                 print("Cache cleared successfully...")
                                             elif trail == False:
                                                 print("Cache clearing failed...")
-                                    
+                                    elif user_request == "4":
+                                        user_theme_request = CLI.endek_themes()
+                                        if user_theme_request == "1":
+                                            CLI.theme_choice_maker("default")
+                                            print("""Theme successfully set to EnDek orginal.
+Restart to apply the changes.""")
+                                        elif user_theme_request == "2":
+                                            CLI.theme_choice_maker("claude")
+                                            print("""Theme successfully set to Claude code style.
+Restart to apply the changes.""")
+                                        elif user_theme_request == "3":
+                                            print("Thank you for your excitement, But custom themes are under development. ")
                             if len(user_covert_input) !=0 :
                                 if user_covert_input[-1] == "E" and user_input[0] !="/":
                                     encryption_key_cursor.execute(f'SELECT * FROM "{input_username}"')
