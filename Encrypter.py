@@ -22,7 +22,7 @@ except ImportError:
     exit(1)
 CLI.logo()
 
-EnDek_verison = "2.7.1"
+EnDek_verison = "2.7.5"
 EnDek_name = "Ludicrous"
 latest_version = updater.intial_update_checker(EnDek_verison)
 if latest_version is not None:

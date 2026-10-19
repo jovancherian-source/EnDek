@@ -11,7 +11,6 @@ import sys
 
 
 
-# THIS FILE IS BETA. USE WITH CAUTION.
 
 def update_checker(user_version):
     integer_user_version = user_version.split('.')
@@ -243,14 +242,15 @@ def installer():
 
 def update_now(user_current_version):
     if update_checker(user_version=user_current_version) != "you are up to date!":
+        print("[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
         if backup() == True :
-            print("backup")
+            print("[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
             if download_update() == "good":
-                print("download")
+                print("[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
                 if sha_checker() == True:
-                    print("sha")
+                    print("[███████████████████░░░░░░░░░░░]  64.3%")
                     if extracter() == True:
-                        print("extracter")
+                        print("[█████████████████████████░░░░░]  85.7%")
                         installer()
 
 #print(installer())
