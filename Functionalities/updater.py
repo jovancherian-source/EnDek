@@ -156,7 +156,7 @@ def sha_checker():
         with urllib.request.urlopen(release_data, timeout=5) as json_data:
             data = json.loads(json_data.read().decode())
         for asset in data["assets"]:
-            if asset["name"].endswith(".zip"):
+            if asset["name"].endswith("e.zip"):
                 sha = asset["digest"]
     except Exception as e:
         return f"could not get GitHub SHA-256 due to: {e}"
