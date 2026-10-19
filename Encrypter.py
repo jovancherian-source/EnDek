@@ -23,7 +23,7 @@ except ImportError:
 CLI.logo()
 
 EnDek_verison = "2.7.5"
-EnDek_name = "Ludicrous"
+EnDek_name = "ViaLactea"
 latest_version = updater.intial_update_checker(EnDek_verison)
 if latest_version is not None:
     print(latest_version)
@@ -383,6 +383,7 @@ mutiple key feature will come soon...""")
                                         if update_status != "you are up to date!":
                                             user_update_response = CLI.endek_update_menu()
                                             if user_update_response == "1":
+                                                print("""In case of corupted or broken update, role back using: python rollback.py""")
                                                 updater.update_now(EnDek_verison)
                                     elif user_request_dual_endek == "3":
                                         conformation = input("""Are you sure you want to clear the cache this can result in slower speed for 
