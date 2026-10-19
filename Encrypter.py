@@ -13,12 +13,12 @@ from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
 import string
 import sys
-from Functionalities import updater, cache_clearer
+from Functionalities import updater, cache_clearer, intial_checker
 try:
     from argon2 import PasswordHasher
 except ImportError:
     print("required Dependencies are not installed to run EnDek.")
-    print('please install it using the command: "pip install -r requirments.txt"')
+    print('please install it using the command: pip install -r requirments.txt')
     exit(1)
 CLI.logo()
 
@@ -27,6 +27,7 @@ EnDek_name = "Ludicrous"
 latest_version = updater.intial_update_checker(EnDek_verison)
 if latest_version is not None:
     print(latest_version)
+intial_checker.startup_check()
 class AccoutDeletion(Exception):
     pass
 def password_hashing(password):
@@ -377,7 +378,12 @@ mutiple key feature will come soon...""")
                                         else:
                                             print("There is 1 local user.")
                                     elif user_request_dual_endek == "2":
-                                        print(updater.update_checker(EnDek_verison))
+                                        update_status =updater.update_checker(EnDek_verison)
+                                        print(update_status)
+                                        if update_status != "you are up to date!":
+                                            user_update_response = CLI.endek_update_menu()
+                                            if user_update_response == "1":
+                                                updater.update_now(EnDek_verison)
                                     elif user_request_dual_endek == "3":
                                         conformation = input("""Are you sure you want to clear the cache this can result in slower speed for 
 sometime, but can increase speed over time don't use this freature frequently.(y/n): """)

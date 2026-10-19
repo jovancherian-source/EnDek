@@ -275,6 +275,25 @@ Select an option (1-5):
 
     return user_input_1
 
+def endek_update_menu():
+    orange = "\033[38;2;238;175;110m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(fr"""╔═════════════════════════════════════╗
+║          EnDek Updates              ║
+╠═════════════════════════════════════╣
+║                                     ║
+║ 1 │ update now                      ║
+║ 2 │ ← Back                          ║
+╚═════════════════════════════════════╝
+
+Select an option (1-4):
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
+
+    return user_input_1
 def endek_themes():
     orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"

@@ -63,7 +63,6 @@ def back_up_verifier(EnDek_path, EnDek_backup_path):
                 file_path = os.path.join(root, file)
                 file_size = os.path.getsize(file_path)
                 toal_files+= 1
-                print(f"Processing file: {file_path}")
                 toal_size+= file_size
     for root, dirs, files in os.walk(EnDek_backup_path):
         dirs[:] = [d for d in dirs if d not in ignored_file]
@@ -72,7 +71,6 @@ def back_up_verifier(EnDek_path, EnDek_backup_path):
                 file_path = os.path.join(root, file)
                 file_size = os.path.getsize(file_path)
                 toal_files_1+= 1
-                print(f"Processing file: {file_path}")
                 toal_size_1+= file_size
     if toal_files_1 == toal_files and toal_size == toal_size_1:
         return True, toal_files
@@ -141,28 +139,7 @@ def download_update():
         return("No internet connection. Unable to Check for Updates...")
     except Exception as e:
         return f"could not download update due to: {e}"
-def after_update_cleanup():
-    try:
-        updater_path =  Path(__file__).resolve()
-        Fuctionalities_folder = updater_path.parent
-        EnDek_main = Fuctionalities_folder.parent
-    except PermissionError:
-        print("Insufficient permissions in main folder to install updates")
-        return False
-    except Exception as e:
-        print(f"failed to index file path due to: {e}")
-        return False
-    try:
-        shutil_zip_path = Path(os.path.join(EnDek_main.parent, "EnDek_update_file.zip"))
-        shutil_backup_path = Path(os.path.join(EnDek_main.parent,".EnDek_backup_for_update"))
-        shutil_zip_path.unlink(missing_ok=True)
-        if Path(EnDek_main.parent/ "EnDek_old").exists():
-            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_old"))
-        if shutil_backup_path.exists():
-            shutil.rmtree(shutil_backup_path)
-        return "cleaned up"
-    except Exception as e:
-        return f"could not clean up due to {e}."
+
 def sha_checker():
     try:
         updater_path =  Path(__file__).resolve()
@@ -245,15 +222,31 @@ def installer():
         updater_path =  Path(__file__).resolve()
         Fuctionalities_folder = updater_path.parent
         EnDek_main = Fuctionalities_folder.parent
+        EnDek_parent = EnDek_main.parent
+        installer_path = Path(EnDek_parent/ f"EnDek-{latest_verison}/installer.py")
     except PermissionError:
         print("Insufficient permissions in main folder to install updates")
         return False
     except Exception as e:
         print(f"failed to index file path due to: {e}")
         return False
+    if os.path.exists(Path(EnDek_parent/f"EnDek-{latest_verison}")):
+        print("hope")
+        subprocess.Popen(
+            [sys.executable, str(installer_path), latest_verison ],
+            cwd=EnDek_parent, creationflags= subprocess.CREATE_NEW_PROCESS_GROUP
+        )
+        sys.exit()
+    else:
+        print("Update file are not available. Please re-run the update.")
 
-
-
+def update_now(user_current_version):
+    if update_checker(user_version=user_current_version) != "you are up to date!":
+        if backup() == True :
+            if download_update() == "good":
+                if sha_checker() == True:
+                    if extracter() == True:
+                        installer()
 
 #print(installer())
 #print(update_checker("1.0.0"))
