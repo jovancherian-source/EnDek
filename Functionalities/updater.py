@@ -129,11 +129,11 @@ def download_update():
         with urllib.request.urlopen(release_data, timeout=5) as json_data:
             data = json.loads(json_data.read().decode())
         latest_verison = data["tag_name"]
-        GitHub_API = f"https://github.com/jovancherian-source/EnDek/releases/download/{latest_verison}/EnDek-{latest_verison.strip("v")}.zip"
+        GitHub_API = f"https://github.com/jovancherian-source/EnDek/releases/download/{latest_verison}/Update-{latest_verison.strip("v")}.zip"
         url_data = urllib.request.Request(GitHub_API, headers={"User-Agent" : "EnDek"})
         with urllib.request.urlopen(url_data) as request, open(output_file, "wb") as output:
             output.write(request.read())
-        return "good"
+        return True
     except urllib.error.URLError:
         return("No internet connection. Unable to Check for Updates...")
     except Exception as e:
@@ -247,7 +247,7 @@ def update_now(user_current_version):
         if backup() == True :
             print("\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
             sys.stdout.flush()
-            if download_update() == "good":
+            if download_update() == True:
                 print("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
                 sys.stdout.flush()
                 if sha_checker() == True:
