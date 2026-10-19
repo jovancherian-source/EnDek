@@ -222,7 +222,7 @@ def installer():
         Fuctionalities_folder = updater_path.parent
         EnDek_main = Fuctionalities_folder.parent
         EnDek_parent = EnDek_main.parent
-        installer_path = Path(EnDek_parent/ f"EnDek-{latest_verison}/installer.py")
+        installer_path = Path(EnDek_parent/ f"{latest_verison}-Update/installer.py")
     except PermissionError:
         print("Insufficient permissions in main folder to install updates")
         return False
