@@ -229,7 +229,7 @@ def installer():
     except Exception as e:
         print(f"failed to index file path due to: {e}")
         return False
-    if os.path.exists(Path(EnDek_parent/f"EnDek-{latest_verison}")):
+    if os.path.exists(Path(EnDek_parent/f"{latest_verison}-Update")):
         subprocess.Popen(
             [sys.executable, str(installer_path), latest_verison ],
             cwd=EnDek_parent, creationflags= subprocess.CREATE_NEW_PROCESS_GROUP
@@ -240,19 +240,19 @@ def installer():
 
 def update_now(user_current_version):
     if update_checker(user_version=user_current_version) != "you are up to date!":
-        print("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
+        sys.stdout.flush("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
         sys.stdout.flush()
         if backup() == True :
-            print( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
+            sys.stdout.flush( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
             sys.stdout.flush()
             if download_update() == True:
-                print("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
+                sys.stdout.flush("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
                 sys.stdout.flush()
                 if sha_checker() == True:
-                    print("\r[███████████████████░░░░░░░░░░░]  64.3%")
+                    sys.stdout.flush("\r[███████████████████░░░░░░░░░░░]  64.3%")
                     sys.stdout.flush()
                     if extracter() == True:
-                        print("\r[█████████████████████████░░░░░]  85.7%")
+                        sys.stdout.flush("\r[█████████████████████████░░░░░]  85.7%")
                         sys.stdout.flush()
                         installer()
 
@@ -260,7 +260,7 @@ def update_now(user_current_version):
 #print(update_checker("1.0.0"))
 #print(extracter())
 #print(sha_checker())
-print(download_update())
+#print(download_update())
 #print(backup())
 #print(after_update_cleanup())
 #print(back_up_verifier(Path("C:/Users/jovan/Documents/EnDek"), Path("C:/Users/jovan/Documents/EnDek_backup_for_update")))
