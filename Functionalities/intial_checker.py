@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 import shutil
-EnDek_verison = "2.7.1"
+EnDek_verison = "2.7.5"
 def after_update_cleanup():
     try:
         updater_path =  Path(__file__).resolve()

@@ -104,7 +104,6 @@ def backup():
     backup_path = EnDek_main.parent/ ".EnDek_backup_for_update"
     verify_status = back_up_verifier(EnDek_path=EnDek_main, EnDek_backup_path=backup_path)
     if verify_status[0]:
-        print(f"backed up all {verify_status[1]} files...")
         return True
     else:
         backup()
@@ -140,6 +139,7 @@ def download_update():
         return f"could not download update due to: {e}"
 
 def sha_checker():
+    sha = None
     try:
         updater_path =  Path(__file__).resolve()
         Fuctionalities_folder = updater_path.parent
@@ -195,7 +195,6 @@ def extracter():
         return("No internet connection. Unable to Check for Updates...")
     except Exception as e:
         return f"could not download update due to: {e}"
-    print(os.path.exists(EnDek_main.parent / "EnDek_update_file.zip"))
     if os.path.exists(EnDek_main.parent / "EnDek_update_file.zip"):
         if os.path.exists(Path(EnDek_main.parent/ f"EnDek-{latest_verison}")):
             os.rmdir(Path(EnDek_main.parent/ f"EnDek-{latest_verison}"))
@@ -231,7 +230,6 @@ def installer():
         print(f"failed to index file path due to: {e}")
         return False
     if os.path.exists(Path(EnDek_parent/f"EnDek-{latest_verison}")):
-        print("hope")
         subprocess.Popen(
             [sys.executable, str(installer_path), latest_verison ],
             cwd=EnDek_parent, creationflags= subprocess.CREATE_NEW_PROCESS_GROUP
@@ -242,19 +240,19 @@ def installer():
 
 def update_now(user_current_version):
     if update_checker(user_version=user_current_version) != "you are up to date!":
-        print("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
+        sys.stdout.write("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
         sys.stdout.flush()
         if backup() == True :
-            print("\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
+            sys.stdout.write( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
             sys.stdout.flush()
             if download_update() == True:
-                print("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
+                sys.stdout.write("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
                 sys.stdout.flush()
                 if sha_checker() == True:
-                    print("\r[███████████████████░░░░░░░░░░░]  64.3%")
+                    sys.stdout.write("\r[███████████████████░░░░░░░░░░░]  64.3%")
                     sys.stdout.flush()
                     if extracter() == True:
-                        print("\r[█████████████████████████░░░░░]  85.7%")
+                        sys.stdout.write("\r[█████████████████████████░░░░░]  85.7%")
                         sys.stdout.flush()
                         installer()
 
@@ -262,7 +260,7 @@ def update_now(user_current_version):
 #print(update_checker("1.0.0"))
 #print(extracter())
 #print(sha_checker())
-#print(download_update())
+print(download_update())
 #print(backup())
 #print(after_update_cleanup())
 #print(back_up_verifier(Path("C:/Users/jovan/Documents/EnDek"), Path("C:/Users/jovan/Documents/EnDek_backup_for_update")))

@@ -435,9 +435,7 @@ Restart to apply the changes.""")
                     except KeyboardInterrupt:
                         print("Thank You for using EnDek")
                         sys.exit()
-                    except Exception as e:
-                        print(f"error occured: {e}")
-                        print("if you were trying to enter any kind of input, please make sure it is a valid Type of input in EnDek")
+
 
                 elif password_verification(input_password_1, users[input_username]) == False:
                     print("wrong password!!")
