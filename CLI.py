@@ -71,7 +71,7 @@ def logo():
 
 
 def EnDek_config_logo():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -90,7 +90,7 @@ Choice:""", end="")
     return ""
 
 def EnDek_encyption_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -111,7 +111,7 @@ Enter selection: _""", end="")
     return user_input_1
 
 def Database_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -131,7 +131,7 @@ def Database_settings_menu():
 
     return user_input_1
 def Account_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -156,7 +156,7 @@ Select an option (1-3):
 
     return user_input_1
 def Account_confirmation_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -179,7 +179,7 @@ Select an option:
 
     return user_input_1
 def first_Scramble_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -198,7 +198,7 @@ Select an option (1-2):
 
     return user_input_1
 def Scramble_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -220,7 +220,7 @@ Select an option (1-3):
     return user_input_1
 
 def new_Scramble_settings_menu():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -239,7 +239,7 @@ Select an option:
 
     return user_input_1
 def new_Scramble_key_for_pre_user():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -253,7 +253,7 @@ def new_Scramble_key_for_pre_user():
 
     return user_input_1
 def endek_dual_settings():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
@@ -276,7 +276,7 @@ Select an option (1-5):
     return user_input_1
 
 def endek_themes():
-    orange = "\033[38;2;204;120;92m"
+    orange = "\033[38;2;238;175;110m"
     reset = "\033[0m"
 
     print(orange)
