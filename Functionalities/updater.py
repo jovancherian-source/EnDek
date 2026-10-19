@@ -158,7 +158,7 @@ def sha_checker():
             data = json.loads(json_data.read().decode())
         for asset in data["assets"]:
             if asset["name"].endswith(".zip"):
-                sha = asset["digest"].strip("sha256").strip(":")
+                sha = asset["digest"]
     except Exception as e:
         return f"could not get GitHub SHA-256 due to: {e}"
     try:
@@ -169,9 +169,10 @@ def sha_checker():
             sha_made = sha_hasher.hexdigest()
     except Exception as e:
         return f"could not generate automonous SHA-256 string for verification due to {e}"
-    if sha == sha_made:
+    sha_made_gen = f"sha256:{sha_made}"
+    if sha == sha_made_gen:
         return True
-    elif sha != sha_made:
+    elif sha != sha_made_gen:
         return False
 def extracter():
     try:
@@ -243,9 +244,13 @@ def installer():
 def update_now(user_current_version):
     if update_checker(user_version=user_current_version) != "you are up to date!":
         if backup() == True :
+            print("backup")
             if download_update() == "good":
+                print("download")
                 if sha_checker() == True:
+                    print("sha")
                     if extracter() == True:
+                        print("extracter")
                         installer()
 
 #print(installer())
