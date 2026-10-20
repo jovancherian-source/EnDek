@@ -13,6 +13,8 @@ from Scrambler import pre_scrambler
 from Scrambler import scrambeler_updater
 import string
 import sys
+import os 
+from pathlib import Path
 from Functionalities import updater, cache_clearer, intial_checker
 try:
     from argon2 import PasswordHasher
@@ -265,7 +267,7 @@ mutiple key feature will come soon...""")
                                                 Decrypter  = {value: key for key, value in encrypt1.items()}
                                                 encryption_key_db_connection.commit()
                                                 print("Encryption key was generated and was added as a key...")
-                                    # Database Settings menu
+                                   
                                     elif user_request_1 == "3":
                                         user_db_cursor.execute("SELECT scrambler FROM users WHERE username = ? " , (input_username,))
                                         scrambler_status = user_db_cursor.fetchone()[0]
@@ -319,6 +321,7 @@ mutiple key feature will come soon...""")
                                                     returned_string = letter_remover.LetterFunctions.letter_remover(pre_returned_string)
                                                     print("Encryption key: " + returned_string)
                                                     print("Encryption key exported successfully...")
+                                # Database settings menu
                                 elif user_request == "3":
                                     user_request_3 = CLI.Database_settings_menu()
                                     if user_request_3 == "1":
@@ -385,6 +388,23 @@ mutiple key feature will come soon...""")
                                             if user_update_response == "1":
                                                 print("""In case of corupted or broken update, role back using: python rollback.py""")
                                                 updater.update_now(EnDek_verison)
+                                        elif update_status == "you are up to date!":
+                                            while True:
+                                                user_request_update = CLI.endek_no_update_menu()
+                                                if user_request_update == "1":
+                                                    update_re_status = updater.update_checker(EnDek_verison)
+                                                    if update_re_status != "you are up to date!":
+                                                        user_update_response = CLI.endek_update_menu()
+                                                        if user_update_response == "1":
+                                                            print("""In case of corupted or broken update, role back using: python rollback.py""")
+                                                            updater.update_now(EnDek_verison)
+                                                    elif update_re_status == "you are up to date!":
+                                                        continue
+                                                elif user_request_update == "2":
+                                                    print("""In case of corupted or broken update, role back using: python rollback.py""")
+                                                    updater.update_now_overide(EnDek_verison)
+                                                elif user_request_update == "3":
+                                                    break
                                     elif user_request_dual_endek == "3":
                                         conformation = input("""Are you sure you want to clear the cache this can result in slower speed for 
 sometime, but can increase speed over time don't use this freature frequently.(y/n): """)

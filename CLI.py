@@ -191,7 +191,7 @@ def first_Scramble_settings_menu():
 ║ 2 │ ← Back                           ║
 ╚══════════════════════════════════════╝
 
-Select an option (1-2):
+Select an option (1/2):
 """, end="")
     print(reset, end="")
     user_input_1= input(r"Enter selection: _")
@@ -283,12 +283,12 @@ def endek_update_menu():
     print(fr"""╔═════════════════════════════════════╗
 ║          EnDek Updates              ║
 ╠═════════════════════════════════════╣
-║                                     ║
+║        Update Available!!           ║
 ║ 1 │ update now                      ║
 ║ 2 │ ← Back                          ║
 ╚═════════════════════════════════════╝
 
-Select an option (1-4):
+Select an option (1/2):
 """, end="")
     print(reset, end="")
     user_input_1= input(r"Enter selection: _")
@@ -314,4 +314,24 @@ Select an option (1-4):
     print(reset, end="")
     user_input_1= input(r"Enter selection: _")
 
+    return user_input_1
+
+def endek_no_update_menu():
+    orange = "\033[38;2;238;175;110m"
+    reset = "\033[0m"
+
+    print(orange)
+    print(fr"""╔═════════════════════════════════════╗
+║          EnDek Updates              ║
+╠═════════════════════════════════════╣
+║        You are up to date!          ║
+║ 1 │ check again                     ║
+║ 2 │ force update                    ║
+║ 3 │ ← Back                          ║
+╚═════════════════════════════════════╝
+
+Select an option (1-3):
+""", end="")
+    print(reset, end="")
+    user_input_1= input(r"Enter selection: _")
     return user_input_1

@@ -255,7 +255,22 @@ def update_now(user_current_version):
                         sys.stdout.write("\r[█████████████████████████░░░░░]  85.7%")
                         sys.stdout.flush()
                         installer()
-
+def update_now_overide():
+    sys.stdout.write("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
+    sys.stdout.flush()
+    if backup() == True :
+        sys.stdout.write( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
+        sys.stdout.flush()
+        if download_update() == True:
+            sys.stdout.write("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
+            sys.stdout.flush()
+            if sha_checker() == True:
+                sys.stdout.write("\r[███████████████████░░░░░░░░░░░]  64.3%")
+                sys.stdout.flush()
+                if extracter() == True:
+                    sys.stdout.write("\r[█████████████████████████░░░░░]  85.7%")
+                    sys.stdout.flush()
+                    installer()
 #print(installer())
 #print(update_checker("1.0.0"))
 #print(extracter())
