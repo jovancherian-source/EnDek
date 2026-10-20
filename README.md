@@ -41,6 +41,7 @@ Open PowerShell or Command Prompt:
 cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
+pip install -r requirments.txt
 python Encrypter.py
 ```
 
@@ -52,6 +53,7 @@ Open Terminal:
 cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
+pip install -r requirments.txt
 python3 Encrypter.py
 ```
 
@@ -63,6 +65,7 @@ Open your terminal:
 cd "installation location"
 git clone https://github.com/jovancherian-source/EnDek.git
 cd EnDek
+pip install -r requirments.txt
 python3 Encrypter.py
 ```
 
@@ -83,6 +86,8 @@ unzip EnDek.zip
 
 cd EnDek-main
 
+pip install -r requirments.txt
+
 python3 Encrypter.py
 ```
 
@@ -90,6 +95,8 @@ If your system uses `python` for Python 3:
 
 ```bash
 cd EnDek-main
+
+pip install -r requirments.txt
 
 python Encrypter.py
 ```
@@ -103,6 +110,8 @@ Invoke-WebRequest "https://github.com/jovancherian-source/EnDek/archive/refs/hea
 Expand-Archive "EnDek.zip" -DestinationPath "."
 
 cd EnDek-main
+
+pip install -r requirments.txt
 
 python Encrypter.py
 ```
