@@ -358,7 +358,7 @@ mutiple key feature will come soon...""")
                                 elif user_request == "4":
                                     user_request_dual_endek = CLI.endek_dual_settings()
                                     if user_request_dual_endek == "1":
-                                        CLI.logos()
+                                        CLI.logo()
                                         print("Version " + EnDek_verison)
                                         print("---------------------------------")
                                         print(f"Signed in as: {input_username}")
