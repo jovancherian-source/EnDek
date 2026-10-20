@@ -17,8 +17,8 @@ def after_update_cleanup():
         shutil_zip_path = Path(os.path.join(EnDek_main.parent, "EnDek_update_file.zip"))
         shutil_backup_path = Path(os.path.join(EnDek_main.parent,".EnDek_backup_for_update"))
         shutil_zip_path.unlink(missing_ok=True)
-        if Path(EnDek_main.parent/ "EnDek_old").exists():
-            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_old"))
+        if Path(EnDek_main.parent/ "EnDek_update").exists():
+            shutil.rmtree(Path(EnDek_main.parent/ "EnDek_update"))
         if shutil_backup_path.exists():
             shutil.rmtree(shutil_backup_path)
         return "cleaned up"
