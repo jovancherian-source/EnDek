@@ -39,7 +39,7 @@ def startup_check():
 Please rename manually to recive further updates. """)
     elif str(EnDek_tree).endswith("-main") == False:
         status = True
-    if os.path.exists(EnDek_parent/"EnDek_old"):
+    if os.path.exists(EnDek_parent/"EnDek_update"):
         after_update_cleanup()
         print(f"""You EnDek has been updated to the latest version {EnDek_verison}.
 And backups have been cleared.""")
