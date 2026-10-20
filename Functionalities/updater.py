@@ -240,19 +240,19 @@ def installer():
 
 def update_now(user_current_version):
     if update_checker(user_version=user_current_version) != "you are up to date!":
-        sys.stdout.flush("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
+        sys.stdout.write("\r[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]   0.0%")
         sys.stdout.flush()
         if backup() == True :
-            sys.stdout.flush( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
+            sys.stdout.write( "\r[████░░░░░░░░░░░░░░░░░░░░░░░░░░]  14.3%")
             sys.stdout.flush()
             if download_update() == True:
-                sys.stdout.flush("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
+                sys.stdout.write("\r[██████████░░░░░░░░░░░░░░░░░░░░]  35.7%")
                 sys.stdout.flush()
                 if sha_checker() == True:
-                    sys.stdout.flush("\r[███████████████████░░░░░░░░░░░]  64.3%")
+                    sys.stdout.write("\r[███████████████████░░░░░░░░░░░]  64.3%")
                     sys.stdout.flush()
                     if extracter() == True:
-                        sys.stdout.flush("\r[█████████████████████████░░░░░]  85.7%")
+                        sys.stdout.write("\r[█████████████████████████░░░░░]  85.7%")
                         sys.stdout.flush()
                         installer()
 
