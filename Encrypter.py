@@ -402,7 +402,7 @@ mutiple key feature will come soon...""")
                                                         continue
                                                 elif user_request_update == "2":
                                                     print("""In case of corupted or broken update, role back using: python rollback.py""")
-                                                    updater.update_now_overide(EnDek_verison)
+                                                    updater.update_now_overide()
                                                 elif user_request_update == "3":
                                                     break
                                     elif user_request_dual_endek == "3":
